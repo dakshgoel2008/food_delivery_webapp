@@ -2,10 +2,13 @@ import mongoose from "mongoose";
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-// import path from "path";
 import bodyParser from "body-parser";
+import path from "path";
+import useRoutes from "./routes/user.js";
+
 const PORT = process.env.PORT;
 const app = express();
+app.use(bodyParser.json({ limit: "4kb" }));
 
 app.use(
     cors({
@@ -14,11 +17,11 @@ app.use(
     })
 );
 
-app.use(express.json({ limit: "4kb" }));
-app.use(express.urlencoded({ extended: true, limit: "4kb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "4kb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 
+app.use("/", useRoutes);
 mongoose
     .connect(`${process.env.DB_PATH}/${process.env.DB_NAME}`)
     .then(() => {
@@ -27,5 +30,5 @@ mongoose
         });
     })
     .catch((err) => {
-        console.log(err);
+        console.log("Database connection failed:", err);
     });
