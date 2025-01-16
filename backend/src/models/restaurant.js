@@ -37,13 +37,12 @@ const restaurantSchema = new Schema(
                 url: "String",
             },
         ],
-        // ownerId: {
-        //     type: Schema.Types.ObjectId,
-        //     ref: "User",
-        //     required: true,
-        // },
+        ownerId: {
+            type: Schema.Types.ObjectId,
+            ref: "User",
+        },
         rating: Number,
-        cusines: [
+        cuisines: [
             {
                 category: {
                     type: "String",

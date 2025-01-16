@@ -14,7 +14,7 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
             missingFields
         );
     }
-    
+
     const restaurant = await Restaurant.findOne({
         $or: [{ address }, { name }],
     });
@@ -48,5 +48,63 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
         });
     } catch (err) {
         throw new ErrorHandler(500, "Unable to add Restaurant", err);
+    }
+});
+
+export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
+    const { categories, restaurant_name } = req.body;
+
+    // if categories already exist add another one.
+    if (!categories) {
+        throw new ErrorHandler(400, "Please provide valid categories to add");
+    }
+
+    let newCuisineCategories = categories
+        .split(",")
+        .map((c) => c.trim().toLowerCase()); // new CuisineCategories includes new CuisineCategories in lowercase
+
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+
+        // if couldn't find the restaurant, throw an error
+        if (!restaurant) {
+            throw new ErrorHandler(
+                400,
+                "Restaurant not found, cannot add categories!"
+            );
+        }
+
+        // else do the work
+
+        const existingCuisinesSet = new Set(
+            restaurant.cuisines.map((c) => c.category)
+        ); // this will create the array of the existing categories
+
+        // pull out the unique category names
+        const uniqueCuisines = newCuisineCategories.filter(
+            (category) => !existingCuisinesSet.has(category)
+        );
+
+        if (uniqueCuisines.length === 0) {
+            return res
+                .status(400)
+                .json({ message: "No new categories to add" });
+        }
+
+        // newCuisines that we have to add finally are these.
+        const newCuisines = uniqueCuisines.map((category) => ({
+            category: category,
+            food: [],
+        }));
+
+        // directly update the cuisines object in restaurant.
+        restaurant.cuisines = [...newCuisines, ...restaurant.cuisines];
+        await restaurant.save();
+        res.status(200).json({
+            message: "Categories added successfully!",
+            data: restaurant,
+        });
+    } catch (err) {
+        throw new ErrorHandler(500, "Unable to add categories", err);
     }
 });
