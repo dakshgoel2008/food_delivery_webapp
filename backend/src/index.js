@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import path from "path";
 import useRoutes from "./routes/user.js";
+import restaurantRoutes from "./routes/restaurant.js";
 
 const PORT = process.env.PORT;
 const app = express();
@@ -22,6 +23,9 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 app.use("/", useRoutes);
+
+app.use("/restaurant", restaurantRoutes);
+
 mongoose
     .connect(`${process.env.DB_PATH}/${process.env.DB_NAME}`)
     .then(() => {

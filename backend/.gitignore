@@ -89,4 +89,6 @@ dist
 
 .svelte-kit
 
-db/data
+src/db/data
+
+.env/
