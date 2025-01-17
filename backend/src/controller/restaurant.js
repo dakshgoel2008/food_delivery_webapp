@@ -64,7 +64,6 @@ export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
         const restaurant = await Restaurant.findOne({ name: restaurant_name });
 
         // only the authorised user can add the cuisines.
-        console.log(restaurant.email, req.user.email);
         if (restaurant.email !== req.user.email) {
             throw new ErrorHandler(401, "Unauthorized to add categories to this restaurant", ["email"]);
         }
@@ -119,6 +118,9 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name.toLowerCase() });
 
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add categories to this restaurant", ["email"]);
+        }
         if (!restaurant) {
             throw new ErrorHandler(400, "Restaurant not found");
         }
@@ -161,5 +163,179 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
             throw err;
         }
         throw new ErrorHandler(500, "Unable to add food item", err);
+    }
+});
+
+export const postUpdateFoodItems = ErrorWrapper(async (req, res, next) => {
+    const { id } = req.params; // id is used for aplying CRUD operations on the food item as it will be unique.
+    const { category, name, description, price, restaurant_name, type } = req.body;
+
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add categories to this restaurant", ["email"]);
+        }
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+
+        // check for category is important as there may be same dish in 2 different categories
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+
+        // check for food item using id.
+        const foodItemIndex = cuisineSelected.food.findIndex((food) => food._id.toString() === id);
+        if (foodItemIndex === -1) {
+            throw new ErrorHandler(404, "Food item not found");
+        }
+
+        // update the food item
+        const updatedFoodItem = {
+            _id: cuisineSelected.food[foodItemIndex]._id,
+            name,
+            price,
+            description,
+            veg: type.toLowerCase() === "veg",
+            images: cuisineSelected.food[foodItemIndex].images,
+        };
+
+        // upload the new image on cloudinary
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            updatedFoodItem.images.push({ url: cloudinaryResponse.secure_url });
+        }
+
+        // update the cuisine with updated item.
+        cuisineSelected.food[foodItemIndex] = updatedFoodItem;
+        await restaurant.save();
+        res.status(200).json({
+            message: "Food item updated successfully",
+            data: restaurant,
+        });
+    } catch (error) {
+        if (error instanceof ErrorHandler) {
+            throw error;
+        }
+        throw new ErrorHandler(500, "Unable to apply CRUD operations on food item", error);
+    }
+});
+
+export const getDeleteFoodItems = ErrorWrapper(async (req, res, next) => {
+    const { id } = req.params;
+    const { category, restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to delete food items from this restaurant", ["email"]);
+        }
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        // check for category is important as there may be same dish in 2 different categories
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+        // check for food item using id.
+        const foodItemIndex = cuisineSelected.food.findIndex((food) => food._id.toString() === id);
+        if (foodItemIndex === -1) {
+            throw new ErrorHandler(404, "Food item not found");
+        }
+        // remove the food item from cuisine
+        cuisineSelected.food.splice(foodItemIndex, 1);
+        await restaurant.save();
+        res.status(200).json({
+            message: "Food item deleted successfully",
+            data: restaurant,
+        });
+    } catch (error) {
+        if (error instanceof ErrorHandler) {
+            throw error;
+        }
+        throw new ErrorHandler(500, "Unable to delete food item", error);
+    }
+});
+
+export const getGetFoodItems = ErrorWrapper(async (req, res, next) => {
+    const { category, restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to get food items from this restaurant", ["email"]);
+        }
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        // check for category is important as there may be same dish in 2 different categories
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+        res.status(200).json({
+            message: "Food items retrieved successfully",
+            data: cuisineSelected.food,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to get food items", err);
+    }
+});
+
+export const getGetParticularFoodItem = ErrorWrapper(async (req, res, next) => {
+    const { id } = req.params;
+    const { category, restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to get food items from this restaurant", ["email"]);
+        }
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        // check for category is important as there may be same dish in 2 different categories
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+        // check for food item using id.
+        const foodItemIndex = cuisineSelected.food.findIndex((food) => food._id.toString() === id);
+        if (foodItemIndex === -1) {
+            throw new ErrorHandler(404, "Food item not found");
+        }
+        res.status(200).json({
+            message: "Food item retrieved successfully",
+            data: cuisineSelected.food[foodItemIndex],
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to get food item", err);
+    }
+});
+
+export const getGetAllCuisines = ErrorWrapper(async (req, res, next) => {
+    const { restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        res.status(200).json({
+            message: "Cuisines retrieved successfully",
+            data: restaurant.cuisines,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to get cuisines", err);
     }
 });
