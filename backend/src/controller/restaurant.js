@@ -131,9 +131,9 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
 
         const newFoodItem = {
             name,
-            description,
             price,
-            type,
+            description,
+            veg: type.toLowerCase() == "veg",
             images: [],
         };
         if (req.file.path) {
@@ -141,7 +141,14 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
             newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
         }
 
-        cuisineSelected.food.push(newFoodItem); // add the food item on desired category.
+        // check if the food item already exists or not.
+        const foodExists = cuisineSelected.food.some(
+            (food) => food.name.toLowerCase() === newFoodItem.name.toLowerCase()
+        );
+        if (foodExists) {
+            throw new ErrorHandler(400, "This food item already exists");
+        }
+        cuisineSelected.food.push(newFoodItem);
 
         await restaurant.save();
         res.status(200).json({
