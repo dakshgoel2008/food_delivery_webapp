@@ -116,5 +116,43 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(401, `Missing fields: ${missingFields.join(", ")}`, missingFields);
     }
 
-    
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name.toLowerCase() });
+
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+
+        // Check whether the cuisine intended to update is present in the restaurant or not.
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+
+        const newFoodItem = {
+            name,
+            description,
+            price,
+            type,
+            images: [],
+        };
+        if (req.file.path) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
+        }
+
+        cuisineSelected.food.push(newFoodItem); // add the food item on desired category.
+
+        await restaurant.save();
+        res.status(200).json({
+            message: "Food item added successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to add food item", err);
+    }
 });
