@@ -1,7 +1,7 @@
 import ErrorHandler from "../utils/ErrorHandler.js";
 import ErrorWrapper from "../utils/ErrorWrapper.js";
 import uploadOnCloudinary from "../utils/uploadOnCloudinary.js";
-import User from "./../models/user.js";
+import User from "../models/user.js";
 import jwt from "jsonwebtoken";
 
 export const postSignup = ErrorWrapper(async (req, res, next) => {
@@ -10,11 +10,7 @@ export const postSignup = ErrorWrapper(async (req, res, next) => {
     const requiredFields = ["email", "password", "username", "name"];
     const missingFields = requiredFields.filter((field) => !req.body[field]);
     if (missingFields.length > 0) {
-        throw new ErrorHandler(
-            401,
-            `Details missing: ${missingFields.join(",")}`,
-            missingFields
-        );
+        throw new ErrorHandler(401, `Details missing: ${missingFields.join(",")}`, missingFields);
     }
 
     // before uploading check if the user exists already or not.
@@ -22,11 +18,10 @@ export const postSignup = ErrorWrapper(async (req, res, next) => {
         $or: [{ email }, { username }],
     });
     if (existingUser) {
-        throw new ErrorHandler(
-            409,
-            "Email or username already exists, Try entering new username or password",
-            ["email", "username"]
-        );
+        throw new ErrorHandler(409, "Email or username already exists, Try entering new username or password", [
+            "email",
+            "username",
+        ]);
     }
 
     // if user does not exist then upload on cloudinary server
@@ -75,22 +70,14 @@ const generateAccessTokenAndRefreshToken = async (userId) => {
             refreshToken,
         };
     } catch (err) {
-        throw new ErrorHandler(
-            500,
-            "Failed to generate access and refresh tokens",
-            [err.message]
-        );
+        throw new ErrorHandler(500, "Failed to generate access and refresh tokens", [err.message]);
     }
 };
 
 export const postLogin = ErrorWrapper(async (req, res, next) => {
     const { email, password, username } = req.body;
     if (!username && !email) {
-        throw new ErrorHandler(
-            401,
-            "You must provide either email or username",
-            ["email", "username"]
-        );
+        throw new ErrorHandler(401, "You must provide either email or username", ["email", "username"]);
     }
     if (!password) {
         throw new ErrorHandler(401, "Password is required", ["password"]);
@@ -99,25 +86,16 @@ export const postLogin = ErrorWrapper(async (req, res, next) => {
         $or: [{ email }, { username }],
     });
     if (!user) {
-        throw new ErrorHandler(401, "Invalid email or username or password", [
-            "email",
-            "username",
-            "password",
-        ]);
+        throw new ErrorHandler(401, "Invalid email or username or password", ["email", "username", "password"]);
     }
 
     // compare password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-        throw new ErrorHandler(401, "Invalid email or username or password", [
-            "email",
-            "username",
-            "password",
-        ]);
+        throw new ErrorHandler(401, "Invalid email or username or password", ["email", "username", "password"]);
     }
 
-    const { accessToken, refreshToken } =
-        await generateAccessTokenAndRefreshToken(user._id);
+    const { accessToken, refreshToken } = await generateAccessTokenAndRefreshToken(user._id);
     user.refreshToken = refreshToken;
     await user.save();
 
@@ -127,7 +105,7 @@ export const postLogin = ErrorWrapper(async (req, res, next) => {
 
     // console.log(user);
     res.status(200)
-        .cookie("ResfreshToken", refreshToken)
+        .cookie("RefreshToken", refreshToken)
         .cookie("AccessToken", accessToken)
         .json({
             message: "Logged in successfully",

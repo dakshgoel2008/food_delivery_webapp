@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import path from "path";
 import useRoutes from "./routes/user.js";
 import restaurantRoutes from "./routes/restaurant.js";
+import { verifyJWT } from "./middlewares/verifyJWT.js";
 
 const PORT = process.env.PORT;
 const app = express();
@@ -24,7 +25,7 @@ app.use(cookieParser());
 
 app.use("/", useRoutes);
 
-app.use("/restaurant", restaurantRoutes);
+app.use("/restaurant", verifyJWT, restaurantRoutes); // first verify the JWT token before going to the restaurant router.
 
 mongoose
     .connect(`${process.env.DB_PATH}/${process.env.DB_NAME}`)

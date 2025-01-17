@@ -4,26 +4,22 @@ import ErrorWrapper from "../utils/ErrorWrapper.js";
 import uploadOnCloudinary from "../utils/uploadOnCloudinary.js";
 
 export const postRestaurant = ErrorWrapper(async (req, res, next) => {
-    const { name, address, email, contact } = req.body;
-    const requiredFields = ["name", "address", "email", "contact"];
+    const { name, address, contact } = req.body;
+    const email = req.user.email; // email will be provided by the user itself.
+    if (!email) {
+        throw new ErrorHandler(401, "Please verify your email and try again", ["email"]);
+    }
+    const requiredFields = ["name", "address", "contact"];
     const missingFields = requiredFields.filter((field) => !req.body[field]);
     if (missingFields.length > 0) {
-        throw new ErrorHandler(
-            401,
-            `Missing fields: ${missingFields.join(", ")}`,
-            missingFields
-        );
+        throw new ErrorHandler(401, `Missing fields: ${missingFields.join(", ")}`, missingFields);
     }
 
     const restaurant = await Restaurant.findOne({
         $or: [{ address }, { name }],
     });
     if (restaurant) {
-        throw new ErrorHandler(
-            400,
-            "Restaurant with the same name or address already exists",
-            ["name", "address"]
-        );
+        throw new ErrorHandler(400, "Restaurant with the same name or address already exists", ["name", "address"]);
     }
     let cloudinaryResponse;
     try {
@@ -39,6 +35,7 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
             email,
             contact,
             coverImage: cloudinaryResponse.secure_url,
+            ownerId: req.user._id,
         });
         await newRestaurant.save();
         res.status(200).json({
@@ -59,36 +56,33 @@ export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(400, "Please provide valid categories to add");
     }
 
-    let newCuisineCategories = categories
-        .split(",")
-        .map((c) => c.trim().toLowerCase()); // new CuisineCategories includes new CuisineCategories in lowercase
-
+    let newCuisineCategories = categories.split(",").map((c) => c.trim().toLowerCase()); // new CuisineCategories includes new CuisineCategories in lowercase
+    if (newCuisineCategories.length == 0) {
+        return res.status(400).json({ message: "No categories provided" });
+    }
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name });
 
+        // only the authorised user can add the cuisines.
+        console.log(restaurant.email, req.user.email);
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add categories to this restaurant", ["email"]);
+        }
+
         // if couldn't find the restaurant, throw an error
         if (!restaurant) {
-            throw new ErrorHandler(
-                400,
-                "Restaurant not found, cannot add categories!"
-            );
+            throw new ErrorHandler(400, "Restaurant not found, cannot add categories!");
         }
 
         // else do the work
 
-        const existingCuisinesSet = new Set(
-            restaurant.cuisines.map((c) => c.category)
-        ); // this will create the array of the existing categories
+        const existingCuisinesSet = new Set(restaurant.cuisines.map((c) => c.category)); // this will create the array of the existing categories
 
         // pull out the unique category names
-        const uniqueCuisines = newCuisineCategories.filter(
-            (category) => !existingCuisinesSet.has(category)
-        );
+        const uniqueCuisines = newCuisineCategories.filter((category) => !existingCuisinesSet.has(category));
 
         if (uniqueCuisines.length === 0) {
-            return res
-                .status(400)
-                .json({ message: "No new categories to add" });
+            return res.status(400).json({ message: "No new categories to add" });
         }
 
         // newCuisines that we have to add finally are these.
@@ -105,6 +99,22 @@ export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
             data: restaurant,
         });
     } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
         throw new ErrorHandler(500, "Unable to add categories", err);
     }
+});
+
+export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
+    const { category, name, description, price, restaurant_name, type } = req.body;
+
+    const requiredFields = ["category", "name", "type", "description", "restaurant_name", "price"];
+    const missingFields = requiredFields.filter((field) => !req.body[field]);
+    if (missingFields.length > 0) {
+        throw new ErrorHandler(401, `Missing fields: ${missingFields.join(", ")}`, missingFields);
+    }
+
+    
 });

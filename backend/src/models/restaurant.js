@@ -40,6 +40,7 @@ const restaurantSchema = new Schema(
         ownerId: {
             type: Schema.Types.ObjectId,
             ref: "User",
+            required: true,
         },
         rating: Number,
         cuisines: [
@@ -63,6 +64,7 @@ const restaurantSchema = new Schema(
                 ],
             },
         ],
+
         menu: [
             {
                 imageUrl: String,
