@@ -1,9 +1,11 @@
 import express from "express";
 import {
+    getAllRestaurants,
     getDeleteFoodItems,
     getGetAllCuisines,
     getGetFoodItems,
     getGetParticularFoodItem,
+    getRestaurantViaId,
     postAddAddFoodImage,
     postAddFoodItems,
     postCuisineCategoryAdd,
@@ -23,6 +25,8 @@ router.post("/add-food-items", upload.single("image"), postAddFoodItems);
 
 //CRUD On FOOD ITEMS:
 router.post("/update-food-items/:id", upload.single("image"), postUpdateFoodItems);
+// FOOD ITEM IMAGE:
+router.post("/add-food-images/:id", upload.single("image"), postAddAddFoodImage);
 
 router.get("/delete-food-items/:id", getDeleteFoodItems);
 
@@ -32,7 +36,11 @@ router.get("/get-food-item/:id", getGetParticularFoodItem); // used to get a par
 
 router.get("/get-all-cuisines", getGetAllCuisines); //printing all cuisines of a particular restaurant
 
-// FOOD ITEM IMAGE: TODO
-router.post("/add-food-images/:id", upload.single("image"), postAddAddFoodImage);
+router.get("/all", getAllRestaurants);
+router.get("/:id", getRestaurantViaId);
+
+// REVIEWS HANDLER.
+
+router.post("/add-reviews");
 
 export default router;
