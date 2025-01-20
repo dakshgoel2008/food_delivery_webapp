@@ -32,6 +32,7 @@ const restaurantSchema = new Schema(
             required: true,
         },
         images: [
+            // images of the restaurant.
             // means Creating a array storing the url of the images.
             {
                 url: "String",
@@ -56,6 +57,7 @@ const restaurantSchema = new Schema(
                         description: String,
                         veg: Boolean,
                         images: [
+                            // images of the cuisines and food.
                             {
                                 url: String,
                             },
@@ -67,6 +69,7 @@ const restaurantSchema = new Schema(
 
         menu: [
             {
+                // can upload the image of the menu.
                 imageUrl: String,
             },
         ],

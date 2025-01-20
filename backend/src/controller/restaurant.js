@@ -166,6 +166,8 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
     }
 });
 
+// CRUD Functionality.
+
 export const postUpdateFoodItems = ErrorWrapper(async (req, res, next) => {
     const { id } = req.params; // id is used for aplying CRUD operations on the food item as it will be unique.
     const { category, name, description, price, restaurant_name, type } = req.body;
@@ -337,5 +339,48 @@ export const getGetAllCuisines = ErrorWrapper(async (req, res, next) => {
             throw err;
         }
         throw new ErrorHandler(500, "Unable to get cuisines", err);
+    }
+});
+
+// function to just update the images means CRUD only but on images.
+export const postAddAddFoodImage = ErrorWrapper(async (req, res, next) => {
+    const { id } = req.params;
+    const { category, restaurant_name } = req.body; // category means => cuisine type.
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add food images to this restaurant", ["email"]);
+        }
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        // check for category is important as there may be same dish in 2 different categories
+        const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
+        if (!cuisineSelected) {
+            throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
+        }
+        // check for food item using id.
+        const foodItemIndex = cuisineSelected.food.findIndex((food) => food._id.toString() === id);
+        if (foodItemIndex === -1) {
+            throw new ErrorHandler(404, "Food item not found");
+        }
+        // upload the new image on cloudinary
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            cuisineSelected.food[foodItemIndex].images.push({ url: cloudinaryResponse.secure_url });
+            await restaurant.save();
+        } else {
+            throw new ErrorHandler(400, "No image provided");
+        }
+        res.status(200).json({
+            message: "Food item image added successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to add food item image", err);
     }
 });
