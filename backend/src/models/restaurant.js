@@ -77,7 +77,6 @@ const restaurantSchema = new Schema(
             {
                 userId: {
                     type: mongoose.SchemaTypes.ObjectId,
-                    ref: "User",
                 },
                 rating: {
                     type: Number,

@@ -8,9 +8,11 @@ import {
     getRestaurantViaId,
     postAddAddFoodImage,
     postAddFoodItems,
+    postAddReviews,
     postCuisineCategoryAdd,
     postRestaurant,
     postUpdateFoodItems,
+    postUpdateReviews,
 } from "../controller/restaurant.js";
 import upload from "../utils/multer.js";
 const router = express.Router();
@@ -40,7 +42,10 @@ router.get("/all", getAllRestaurants);
 router.get("/:id", getRestaurantViaId);
 
 // REVIEWS HANDLER.
-
-router.post("/add-reviews");
+router.post("/add-review", upload.single("image"), postAddReviews);
+router.post("/update-review/:reviewId", upload.single("image"), postUpdateReviews);
+// router.get("/delete-review/:reviewId", getDeleteReviews);
+// router.get("/get-all-review", getGetAllReviews);
+// router.get("/get-review/:reviewId", getReview);
 
 export default router;

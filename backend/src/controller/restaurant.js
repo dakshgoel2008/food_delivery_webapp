@@ -420,3 +420,109 @@ export const getRestaurantViaId = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(500, "Unable to get restaurant", err);
     }
 });
+
+export const postAddReviews = ErrorWrapper(async (req, res, next) => {
+    const { restaurant_name, rating, message } = req.body;
+    const { name } = req.user;
+
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add reviews", ["email"]);
+        }
+        if (Number(rating) < 1 || Number(rating) > 5) {
+            throw new ErrorHandler(400, "Invalid rating. Rating should be between 1 and 5");
+        }
+        if (!restaurant.reviews) {
+            restaurant.reviews = { list: [], images: [] };
+        }
+        const review = {
+            username: name,
+            rating: +rating,
+            message: message,
+            userId: req.user._id,
+        };
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            if (!restaurant.reviews.images) {
+                restaurant.reviews.images = [];
+            }
+            restaurant.reviews.images.push({ url: cloudinaryResponse.secure_url });
+        }
+
+        // Push review into reviews list
+        restaurant.reviews.push(review);
+
+        // Save updated restaurant
+        await restaurant.save();
+
+        res.status(201).json({
+            message: "Review added successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to add review", err);
+    }
+});
+
+export const postUpdateReviews = ErrorWrapper(async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { restaurant_name, rating, message } = req.body;
+    const { name } = req.user;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to update reviews", ["email"]);
+        }
+        if (Number(rating) < 1 || Number(rating) > 5) {
+            throw new ErrorHandler(400, "Invalid rating. Rating should be between 1 and 5");
+        }
+        if (!restaurant.reviews) {
+            restaurant.reviews = { list: [], images: [] };
+        }
+        const reviewIndex = restaurant.reviews.findIndex((review) => review._id.toString() === reviewId.toString());
+        if (reviewIndex === -1) {
+            throw new ErrorHandler(404, "Review Not found create new Review");
+        }
+        const review = {
+            username: name,
+            rating: +rating,
+            message: message,
+            userId: req.user._id,
+        };
+        if (req.file) {
+            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+            if (!restaurant.reviews.images) {
+                restaurant.reviews.images = [];
+            }
+            restaurant.reviews.images.push({ url: cloudinaryResponse.secure_url });
+        }
+
+        // Push review into reviews list
+        restaurant.reviews[reviewIndex] = review;
+
+        // Save updated restaurant
+        await restaurant.save();
+
+        res.status(201).json({
+            message: "Review updated successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to add review", err);
+    }
+});
