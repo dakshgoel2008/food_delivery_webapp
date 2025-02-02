@@ -1,11 +1,14 @@
 import express from "express";
 import {
     getAllRestaurants,
+    getAllReviews,
     getDeleteFoodItems,
+    getDeleteReviews,
     getGetAllCuisines,
     getGetFoodItems,
     getGetParticularFoodItem,
     getRestaurantViaId,
+    getReview,
     postAddAddFoodImage,
     postAddFoodItems,
     postAddReviews,
@@ -44,8 +47,8 @@ router.get("/:id", getRestaurantViaId);
 // REVIEWS HANDLER.
 router.post("/add-review", upload.single("image"), postAddReviews);
 router.post("/update-review/:reviewId", upload.single("image"), postUpdateReviews);
-// router.get("/delete-review/:reviewId", getDeleteReviews);
-// router.get("/get-all-review", getGetAllReviews);
-// router.get("/get-review/:reviewId", getReview);
+router.get("/delete-review/:reviewId", getDeleteReviews);
+router.get("/get-all-review", getAllReviews);
+router.get("/get-review/:reviewId", getReview);
 
 export default router;

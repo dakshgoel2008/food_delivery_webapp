@@ -526,3 +526,85 @@ export const postUpdateReviews = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(500, "Unable to add review", err);
     }
 });
+
+export const getDeleteReviews = ErrorWrapper(async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to delete reviews", ["email"]);
+        }
+        if (!restaurant.reviews) {
+            restaurant.reviews = { list: [], images: [] };
+        }
+        const reviewIndex = restaurant.reviews.findIndex((review) => review._id.toString() === reviewId.toString());
+        if (reviewIndex === -1) {
+            throw new ErrorHandler(404, "Review not found");
+        }
+        restaurant.reviews.splice(reviewIndex, 1);
+        await restaurant.save();
+        res.status(200).json({
+            message: "Review deleted successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to delete review", err);
+    }
+});
+
+export const getAllReviews = ErrorWrapper(async (req, res, next) => {
+    const { restaurant_name } = req.query;
+    console.log("Hello world");
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        res.status(200).json({
+            message: "All Reviews retrieved successfully",
+            data: restaurant.reviews,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to get reviews", err);
+    }
+});
+
+export const getReview = ErrorWrapper(async (req, res, next) => {
+    const { reviewId } = req.params;
+    const { restaurant_name } = req.query;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        if (!restaurant.reviews) {
+            restaurant.reviews = { list: [], images: [] };
+        }
+        const reviewIndex = restaurant.reviews.findIndex((review) => review._id.toString() === reviewId.toString());
+        if (reviewIndex === -1) {
+            throw new ErrorHandler(404, "Review not found");
+        }
+        res.status(200).json({
+            message: "Review retrieved successfully",
+            data: restaurant.reviews[reviewIndex],
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to get review", err);
+    }
+});
