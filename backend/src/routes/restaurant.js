@@ -48,7 +48,8 @@ router.get("/:id", getRestaurantViaId);
 router.post("/add-review", upload.single("image"), postAddReviews);
 router.post("/update-review/:reviewId", upload.single("image"), postUpdateReviews);
 router.get("/delete-review/:reviewId", getDeleteReviews);
-router.get("/get-all-review", getAllReviews);
+// router.get("/get-all-reviews", getAllReviews);
+router.post("/reviews", getAllReviews);
 router.get("/get-review/:reviewId", getReview);
 
 export default router;

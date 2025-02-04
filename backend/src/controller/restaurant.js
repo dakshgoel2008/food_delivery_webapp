@@ -560,16 +560,19 @@ export const getDeleteReviews = ErrorWrapper(async (req, res, next) => {
     }
 });
 
+
 export const getAllReviews = ErrorWrapper(async (req, res, next) => {
-    const { restaurant_name } = req.query;
-    console.log("Hello world");
+    const { restaurant_name } = req.body;
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name });
         if (!restaurant) {
             throw new ErrorHandler(400, "Restaurant not found");
         }
+        if (!restaurant.reviews) {
+            restaurant.reviews = { list: [], images: [] };
+        }
         res.status(200).json({
-            message: "All Reviews retrieved successfully",
+            message: "Reviews retrieved successfully",
             data: restaurant.reviews,
         });
     } catch (err) {
