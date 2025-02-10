@@ -5,60 +5,110 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle, #2c3e50, #1c2833);
-    color: white;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #333;
     text-align: center;
-    font-family: "Poppins", sans-serif;
+    font-family: "Nunito", sans-serif;
+    padding: 20px;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Error Number */
+/* Food Pattern Background */
+.error-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("https://www.transparenttextures.com/patterns/food.png");
+    opacity: 0.1;
+    z-index: -1;
+}
+
+/* Error Code with Food Icon */
 .error-code {
-    font-size: 100px;
-    font-weight: 700;
-    color: #ff4757;
-    text-shadow: 0 0 10px rgba(255, 71, 87, 0.7), 0 0 20px rgba(255, 71, 87, 0.5);
-    animation: glow 1.5s infinite alternate;
+    font-size: 140px;
+    font-weight: 900;
+    color: #ff6f61;
+    text-shadow: 0 0 10px rgba(255, 111, 97, 0.5), 0 0 20px rgba(255, 111, 97, 0.5);
+    position: relative;
 }
 
-/* Glow animation */
-@keyframes glow {
+.error-code::after {
+    content: "🍕";
+    position: absolute;
+    top: -20px;
+    right: -30px;
+    font-size: 40px;
+    animation: floatFood 3s infinite ease-in-out;
+}
+
+@keyframes floatFood {
+    0% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(20deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+/* Typing Effect with Food Theme */
+.error-message {
+    font-size: 24px;
+    margin: 20px 0;
+    opacity: 0.9;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+    border-right: 3px solid #ff6f61;
+    animation: typing 3s steps(40) infinite alternate, blink 0.7s infinite;
+    color: #ff6f61;
+    text-shadow: 0 0 5px rgba(255, 111, 97, 0.5), 0 0 10px rgba(255, 111, 97, 0.5);
+}
+
+@keyframes typing {
     from {
-        text-shadow: 0 0 10px rgba(255, 71, 87, 0.7), 0 0 20px rgba(255, 71, 87, 0.5);
+        width: 0;
     }
     to {
-        text-shadow: 0 0 20px rgba(255, 71, 87, 1), 0 0 40px rgba(255, 71, 87, 0.9);
+        width: 100%;
     }
 }
 
-/* Error Message */
-.error-message {
-    font-size: 22px;
-    margin: 10px 0;
-    opacity: 0.9;
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
 }
 
-/* Home Button */
-.error-container .home-btn {
-    margin-top: 20px;
-    padding: 12px 20px;
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    background: #ff6b6b;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+/* Floating Food Items */
+.food-item {
+    width: 80px;
+    position: absolute;
+    animation: float 5s infinite ease-in-out;
 }
 
-.error-container .home-btn:hover {
-    background: #ff4757;
-    transform: scale(1.05);
+.pizza {
+    top: 10%;
+    left: 5%;
+    animation-duration: 4s;
 }
 
-/* Animated floating effect */
-.floating {
-    animation: float 3s infinite ease-in-out;
+.burger {
+    top: 50%;
+    right: 10%;
+    animation-duration: 6s;
+}
+
+.taco {
+    bottom: 10%;
+    left: 20%;
+    animation-duration: 7s;
 }
 
 @keyframes float {
@@ -66,9 +116,30 @@
         transform: translateY(0);
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-20px);
     }
     100% {
         transform: translateY(0);
+    }
+}
+
+/* Redirect Message with Food Theme */
+.redirect-message {
+    font-size: 18px;
+    color: #ff6f61;
+    margin-top: 20px;
+    text-shadow: 0 0 5px rgba(255, 111, 97, 0.5), 0 0 10px rgba(255, 111, 97, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .error-code {
+        font-size: 100px;
+    }
+    .error-message {
+        font-size: 18px;
+    }
+    .food-item {
+        width: 60px;
     }
 }
