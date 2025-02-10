@@ -1,0 +1,74 @@
+/* General Styles */
+.error-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle, #2c3e50, #1c2833);
+    color: white;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Error Number */
+.error-code {
+    font-size: 100px;
+    font-weight: 700;
+    color: #ff4757;
+    text-shadow: 0 0 10px rgba(255, 71, 87, 0.7), 0 0 20px rgba(255, 71, 87, 0.5);
+    animation: glow 1.5s infinite alternate;
+}
+
+/* Glow animation */
+@keyframes glow {
+    from {
+        text-shadow: 0 0 10px rgba(255, 71, 87, 0.7), 0 0 20px rgba(255, 71, 87, 0.5);
+    }
+    to {
+        text-shadow: 0 0 20px rgba(255, 71, 87, 1), 0 0 40px rgba(255, 71, 87, 0.9);
+    }
+}
+
+/* Error Message */
+.error-message {
+    font-size: 22px;
+    margin: 10px 0;
+    opacity: 0.9;
+}
+
+/* Home Button */
+.error-container .home-btn {
+    margin-top: 20px;
+    padding: 12px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: #ff6b6b;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.error-container .home-btn:hover {
+    background: #ff4757;
+    transform: scale(1.05);
+}
+
+/* Animated floating effect */
+.floating {
+    animation: float 3s infinite ease-in-out;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

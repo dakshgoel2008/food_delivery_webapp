@@ -1,4 +1,4 @@
-import Styles from "./auth.module.css";
+import Styles from "./CSS/auth.module.css";
 import React, { useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -36,20 +36,22 @@ const Signup = () => {
     };
 
     return (
-        <div className={Styles["auth-container"]}>
-            <h2>Signup</h2>
-            <input ref={usernameRef} type="text" placeholder="Enter username" />
-            <input ref={emailRef} type="email" placeholder="Enter email" />
-            <input ref={passwordRef} type="password" placeholder="Enter password" />
-            <input ref={nameRef} type="text" placeholder="Enter name" />
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            <button onClick={signupHandler}>Signup</button>
-            <p>
-                Already have an account?{" "}
-                <NavLink to="/login" className={Styles["nav-link"]}>
-                    Login
-                </NavLink>
-            </p>
+        <div className={Styles["auth-page"]}>
+            <div className={Styles["auth-container"]}>
+                <h2>Signup</h2>
+                <input ref={usernameRef} type="text" placeholder="Enter username" />
+                <input ref={emailRef} type="email" placeholder="Enter email" />
+                <input ref={passwordRef} type="password" placeholder="Enter password" />
+                <input ref={nameRef} type="text" placeholder="Enter name" />
+                <input type="file" accept="image/*" onChange={handleImageChange} />
+                <button onClick={signupHandler}>Signup</button>
+                <p>
+                    Already have an account?{" "}
+                    <NavLink to="/login" className={Styles["nav-link"]}>
+                        Login
+                    </NavLink>
+                </p>
+            </div>
         </div>
     );
 };

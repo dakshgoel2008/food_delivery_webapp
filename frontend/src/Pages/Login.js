@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import Styles from "./auth.module.css";
+import Styles from "./CSS/auth.module.css";
 const Login = () => {
     const userRef = useRef();
     const passwordRef = useRef();
@@ -24,14 +24,19 @@ const Login = () => {
     };
 
     return (
-        <div className={Styles["auth-container"]}>
-            <h2>Login</h2>
-            <input ref={userRef} type="text" placeholder="Enter Username or Email" />
-            <input ref={passwordRef} type="password" placeholder="Enter password" />
-            <button onClick={loginHandler}>Login</button>
-            <p>
-                Don't have an account? <NavLink to="/signup" className={Styles["nav-link"]}>Signup</NavLink>
-            </p>
+        <div className = {Styles["auth-page"]}>
+            <div className={Styles["auth-container"]}>
+                <h2>Login</h2>
+                <input ref={userRef} type="text" placeholder="Enter Username or Email" />
+                <input ref={passwordRef} type="password" placeholder="Enter password" />
+                <button onClick={loginHandler}>Login</button>
+                <p>
+                    Don't have an account?{" "}
+                    <NavLink to="/signup" className={Styles["nav-link"]}>
+                        Signup
+                    </NavLink>
+                </p>
+            </div>
         </div>
     );
 };

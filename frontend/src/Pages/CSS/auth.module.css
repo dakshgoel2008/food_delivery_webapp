@@ -1,6 +1,6 @@
-/* Apply smooth font and background */
-body {
-    font-family: 'Poppins', sans-serif;
+/* Auth Page Container */
+.auth-page {
+    font-family: "Poppins", sans-serif;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     color: #fff;
     display: flex;

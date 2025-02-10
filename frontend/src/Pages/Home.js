@@ -13,7 +13,7 @@ const Home = () => {
             <div>{userData.name}</div>
             <div>{userData.email}</div>
             <div>{userData.username}</div>
-            <img src = {userData.image}></img>
+            <img src={userData.image}></img>
         </div>
     );
 };
