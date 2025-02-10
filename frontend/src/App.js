@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import { Route, Routes } from "react-router-dom";
+import Login from "./Pages/Login";
+import Signup from "./Pages/Signup";
+import Home from "./Pages/Home";
 const App = () => {
-    useEffect(() => {
-        axios
-            .get("http://localhost:4444")
-            .then(({ data }) => {
-                console.log(data);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
-    return <div>App</div>;
+    return (
+        <div>
+            <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/app" element={<Home />} />
+            </Routes>
+        </div>
+    );
 };
 
 export default App;
