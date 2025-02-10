@@ -1,47 +1,55 @@
-import { useDispatch } from "react-redux";
-import axios from "../Utils/axios.js";
-import React, { useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import Styles from "./auth.module.css";
+import React, { useRef, useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Signup = () => {
     const usernameRef = useRef();
     const emailRef = useRef();
     const passwordRef = useRef();
     const nameRef = useRef();
-    const dispatch = useDispatch();
+    const [image, setImage] = useState(null);
     const navigate = useNavigate();
 
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
+    };
+
     const signupHandler = async () => {
-        const username = usernameRef.current.value;
-        const email = emailRef.current.value;
-        const password = passwordRef.current.value;
+        const formData = new FormData();
+        formData.append("username", usernameRef.current.value);
+        formData.append("email", emailRef.current.value);
+        formData.append("password", passwordRef.current.value);
+        formData.append("name", nameRef.current.value);
+        if (image) formData.append("image", image);
 
         try {
-            const { data } = await axios.post("/signup", { username, email, password });
-            console.log(data);
+            await axios.post("http://localhost:4444/signup", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
 
-            // SET USER DATA TO THE REDUX
-            dispatch({ type: "SET_USER", payload: data.user });
-
-            // NAVIGATE TO HOME PAGE:
-            navigate("/app");
+            alert("Signup successful! Please log in.");
+            navigate("/login");
         } catch (err) {
-            alert("Difficulty in signup: ", err.response.data.message);
-            console.log(err);
+            alert(err.response?.data.message || "Signup failed.");
         }
     };
 
     return (
-        <div>
-            <input ref={usernameRef} type="text" placeholder="Enter username"></input>
-            <br />
-            <input ref={emailRef} type="email" placeholder="Enter email"></input>
-            <br />
-            <input ref={passwordRef} type="password" placeholder="Enter password"></input>
-            <br />
-            <input ref={nameRef} type="name" placeholder="Enter name"></input>
-            <br />
+        <div className={Styles["auth-container"]}>
+            <h2>Signup</h2>
+            <input ref={usernameRef} type="text" placeholder="Enter username" />
+            <input ref={emailRef} type="email" placeholder="Enter email" />
+            <input ref={passwordRef} type="password" placeholder="Enter password" />
+            <input ref={nameRef} type="text" placeholder="Enter name" />
+            <input type="file" accept="image/*" onChange={handleImageChange} />
             <button onClick={signupHandler}>Signup</button>
+            <p>
+                Already have an account?{" "}
+                <NavLink to="/login" className={Styles["nav-link"]}>
+                    Login
+                </NavLink>
+            </p>
         </div>
     );
 };
