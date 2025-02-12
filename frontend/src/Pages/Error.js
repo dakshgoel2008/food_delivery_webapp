@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Styles from "./CSS/Error.module.css";
+import { useSelector } from "react-redux";
 
 const errorMessages = [
     "Oops! Looks like this page is out for delivery!",
@@ -12,7 +13,7 @@ const errorMessages = [
 
 const ErrorPage = ({ errorCode = 404 }) => {
     const navigate = useNavigate();
-    const isLoggedIn = localStorage.getItem("token") !== null; // Check if user is logged in
+    const userData = useSelector((state) => state.userReducer); // in userReducer we have isLoggedIn
     const [redirectMessage, setRedirectMessage] = useState("");
 
     useEffect(() => {
@@ -22,20 +23,20 @@ const ErrorPage = ({ errorCode = 404 }) => {
 
         // Redirect logic
         const redirectTimeout = setTimeout(() => {
-            if (isLoggedIn) {
+            if (userData.isLoggedIn) {
                 // If logged in, redirect to /app
                 setRedirectMessage("Already logged in! Redirecting to Home...");
-                setTimeout(() => navigate("/app"), 3000); // Redirect after 2 seconds
+                setTimeout(() => navigate("/app"), 2000); // Redirect after 2 seconds
             } else {
                 // If not logged in, redirect to /login
                 setRedirectMessage("Please log in first! Redirecting to Login...");
-                setTimeout(() => navigate("/login"), 3000); // Redirect after 2 seconds
+                setTimeout(() => navigate("/login"), 2000); // Redirect after 2 seconds
             }
         }, 2000); // Wait 1.5 seconds before showing the redirect message
 
         // Cleanup timeout
         return () => clearTimeout(redirectTimeout);
-    }, [isLoggedIn, navigate]);
+    }, [userData.isLoggedIn, navigate]);
 
     return (
         <div className={Styles["error-container"]}>

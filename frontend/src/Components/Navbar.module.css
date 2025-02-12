@@ -1,32 +1,51 @@
 .Navlinks_Css {
     display: flex;
-    gap: 55px; /* Space between links */
+    gap: 60px; /* Reduced gap for better spacing */
     list-style: none;
     padding: 0;
-    margin: 0;
-    width: 60%;
-    margin: auto;
+    margin: 0px auto;
+    justify-content: center; /* Centers navigation */
+    align-items: center;
+    width: 100%;
+    background-color: transparent;
 }
 
+/* Link styling */
 .Navlinks_Css a {
     text-decoration: none;
-    color: #333; /* Dark gray text */
-    font-size: 16px;
+    color: #333;
+    font-size: 17px;
     font-weight: 500;
-    padding: 10px 15px;
+    padding: 12px 18px;
     border-radius: 8px;
     transition: all 0.3s ease-in-out;
+    position: relative;
 }
 
+/* Hover effect */
 .Navlinks_Css a:hover {
-    background-color: #5387c0; /* Blue hover effect */
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
+    background-color: #ecee4f;
+    color: rgba(29, 28, 28, 0.983);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    transform: translateY(-2px); /* Subtle hover lift */
 }
 
+/* Active link */
 .Navlinks_Css a.active {
-    background-color: #0056b3; /* Darker blue for active links */
+    background-color: #e6b845;
     color: white;
     font-weight: bold;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+    .Navlinks_Css {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .Navlinks_Css a {
+        padding: 10px 15px;
+        font-size: 16px;
+    }
 }
