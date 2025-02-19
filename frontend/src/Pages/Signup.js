@@ -1,7 +1,7 @@
 import Styles from "./CSS/auth.module.css";
 import React, { useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../Utils/axios.js";
 
 const Signup = () => {
     const usernameRef = useRef();
@@ -24,8 +24,9 @@ const Signup = () => {
         if (image) formData.append("image", image);
 
         try {
-            await axios.post("http://localhost:4444/signup", formData, {
+            await axios.post("/signup", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true, // to set cookies on the browser in cross origin requests
             });
 
             alert("Signup successful! Please log in.");

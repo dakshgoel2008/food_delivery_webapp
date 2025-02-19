@@ -5,22 +5,31 @@ import uploadOnCloudinary from "../utils/uploadOnCloudinary.js";
 
 export const postRestaurant = ErrorWrapper(async (req, res, next) => {
     const { name, address, contact } = req.body;
-    const email = req.user.email; // email will be provided by the user itself.
+    const email = req.user?.email; // Ensure req.user exists before accessing email
+
     if (!email) {
         throw new ErrorHandler(401, "Please verify your email and try again", ["email"]);
     }
+
     const requiredFields = ["name", "address", "contact"];
     const missingFields = requiredFields.filter((field) => !req.body[field]);
+
     if (missingFields.length > 0) {
-        throw new ErrorHandler(401, `Missing fields: ${missingFields.join(", ")}`, missingFields);
+        throw new ErrorHandler(400, `Missing fields: ${missingFields.join(", ")}`, missingFields);
     }
 
-    const restaurant = await Restaurant.findOne({
-        $or: [{ address }, { name }],
+    const existingRestaurant = await Restaurant.findOne({ 
+        $or: [{ address }, { name }] 
     });
-    if (restaurant) {
+
+    if (existingRestaurant) {
         throw new ErrorHandler(400, "Restaurant with the same name or address already exists", ["name", "address"]);
     }
+
+    if (!req.file) {
+        throw new ErrorHandler(400, "Restaurant cover image is required", ["coverImage"]);
+    }
+
     let cloudinaryResponse;
     try {
         cloudinaryResponse = await uploadOnCloudinary(req.file.path);
@@ -29,7 +38,7 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
     }
 
     try {
-        let newRestaurant = new Restaurant({
+        const newRestaurant = new Restaurant({
             name,
             address,
             email,
@@ -37,16 +46,19 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
             coverImage: cloudinaryResponse.secure_url,
             ownerId: req.user._id,
         });
+
         await newRestaurant.save();
+
         res.status(200).json({
             success: true,
             message: "Restaurant added successfully",
             restaurant: newRestaurant,
         });
     } catch (err) {
-        throw new ErrorHandler(500, "Unable to add Restaurant", err);
+        throw new ErrorHandler(500, "Unable to add Restaurant", [err.message]);
     }
 });
+
 
 export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
     const { categories, restaurant_name } = req.body;
@@ -114,7 +126,6 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
     if (missingFields.length > 0) {
         throw new ErrorHandler(401, `Missing fields: ${missingFields.join(", ")}`, missingFields);
     }
-
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name.toLowerCase() });
 
@@ -162,7 +173,7 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
             // Rethrow the specific error
             throw err;
         }
-        throw new ErrorHandler(500, "Unable to add food item", err);
+        throw new ErrorHandler(500, "Unable to add food item", [err.message]);
     }
 });
 
@@ -559,7 +570,6 @@ export const getDeleteReviews = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(500, "Unable to delete review", err);
     }
 });
-
 
 export const getAllReviews = ErrorWrapper(async (req, res, next) => {
     const { restaurant_name } = req.body;

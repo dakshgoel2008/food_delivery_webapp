@@ -1,12 +1,12 @@
-// its a call back function:
 const ErrorWrapper = (cb) => {
     return async function (req, res, next) {
         try {
             await cb(req, res, next);
         } catch (err) {
-            res.status(err.statusCode).json({
-                status: err.statusCode,
-                message: err.message,
+            const statusCode = err.statusCode || 500; // Default to 500 if undefined
+            res.status(statusCode).json({
+                status: statusCode,
+                message: err.message || "Internal Server Error",
                 success: false,
             });
         }

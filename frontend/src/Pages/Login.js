@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import axios from "../Utils/axios.js";
 import Styles from "./CSS/auth.module.css";
 const Login = () => {
     const userRef = useRef();
@@ -11,11 +11,12 @@ const Login = () => {
 
     const loginHandler = async () => {
         try {
-            const { data } = await axios.post("http://localhost:4444/login", {
+            const { data } = await axios.post("/login", {
                 username: userRef.current.value,
                 password: passwordRef.current.value,
+                withCredentials: true,
             });
-
+            console.log(data);
             dispatch({ type: "SET_USER", payload: { ...data.user, isLoggedIn: true } });
             navigate("/app");
         } catch (err) {
