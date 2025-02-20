@@ -4,25 +4,25 @@ import Signup from "./Pages/Signup";
 import Home from "./Pages/Home";
 import ErrorPage from "./Pages/Error";
 import Navbar from "./Components/Navbar.js"; // Import the Navbar component
+import RestaurantPage from "./Pages/RestaurantPage.js";
 
 const App = () => {
-    const location = useLocation();
-
-    // Define routes where the Navbar should appear
-    const showNavbarRoutes = ["/app", "/cart", "/history"]; // Add more routes as needed
-
-    // Check if the current route is in the list of routes where the Navbar should appear
-    const shouldShowNavbar = showNavbarRoutes.includes(location.pathname);
-
     return (
         <div>
             {/* Conditionally render the Navbar */}
-            {shouldShowNavbar && <Navbar />}
+            {<Navbar />}
 
             <Routes>
+                {/* Authentication pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+
+                {/* Main Home Page */}
                 <Route path="/app" element={<Home />} />
+
+                {/* Particular Restaurant page */}
+                <Route path="/restaurant/:restaurant_id" element={<RestaurantPage />} />
+
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </div>
