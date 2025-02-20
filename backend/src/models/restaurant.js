@@ -10,12 +10,10 @@ const restaurantSchema = new Schema(
             lowercase: true,
             required: true,
             trim: true,
-            unique: true,
         },
         address: {
             type: "String",
             lowercase: true,
-            unique: true,
             required: true,
         },
         email: {

@@ -18,8 +18,8 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(400, `Missing fields: ${missingFields.join(", ")}`, missingFields);
     }
 
-    const existingRestaurant = await Restaurant.findOne({ 
-        $or: [{ address }, { name }] 
+    const existingRestaurant = await Restaurant.findOne({
+        $or: [{ address }, { name }],
     });
 
     if (existingRestaurant) {
@@ -36,7 +36,6 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
     } catch (err) {
         throw new ErrorHandler(500, "Failed to upload image", [err.message]);
     }
-
     try {
         const newRestaurant = new Restaurant({
             name,
@@ -58,7 +57,6 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(500, "Unable to add Restaurant", [err.message]);
     }
 });
-
 
 export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
     const { categories, restaurant_name } = req.body;

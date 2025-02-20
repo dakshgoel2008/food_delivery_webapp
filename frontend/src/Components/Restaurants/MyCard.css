@@ -1,0 +1,95 @@
+/* Container for all cards */
+.restaurants-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Automatically fit cards into two columns */
+    gap: 20px; /* Space between cards */
+    padding: 40px;
+    width: 100%; /* Use full width of the page */
+    margin: 0 auto; /* Center the container */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+/* Card Styling */
+.card {
+    width: 90%; /* Full width inside the grid */
+    margin: auto;
+    max-width: 100%; /* Allow cards to grow to fit the grid */
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-bottom: 20px
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+/* Image Styling */
+.coverImage {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}
+
+/* Card Body Styling */
+.card-body {
+    text-align: center;
+    padding: 16px;
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+    .restaurants-container {
+        grid-template-columns: 1fr; /* Single column for smaller screens */
+    }
+}
+
+/* Restaurant Name Styling */
+.restaurant-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Address & Contact Styling */
+.restaurant-info {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 8px;
+}
+
+/* Cuisines Section */
+.cuisines-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+    justify-content: center;
+    align-items: center; /* Align items vertically */
+    min-height: 40px; /* Ensure consistent height even when no cuisines are available */
+}
+
+/* Individual Cuisine Tag */
+.cuisine-tag {
+    background-color: #ccc; /* Nice orange shade */
+    color: black;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 16px;
+    font-weight: bold;
+    text-transform: capitalize;
+    white-space: nowrap; /* Prevent text from wrapping */
+}
+
+/* No Cuisines Available */
+.no-cuisines {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: center;
+    width: 100%; /* Ensure it takes full width */
+}

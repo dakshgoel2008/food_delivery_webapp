@@ -16,7 +16,6 @@ const Login = () => {
                 password: passwordRef.current.value,
                 withCredentials: true,
             });
-            console.log(data);
             dispatch({ type: "SET_USER", payload: { ...data.user, isLoggedIn: true } });
             navigate("/app");
         } catch (err) {
