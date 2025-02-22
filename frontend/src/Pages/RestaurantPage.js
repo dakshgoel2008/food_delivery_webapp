@@ -1,13 +1,13 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import FoodImageCarousel from "../Components/Restaurants/FoodImageCrousel";
 
 const RestaurantPage = () => {
     const { restaurant_id } = useParams();
-
     const restaurants = useSelector((state) => state.restaurantReducer);
     const restaurant = restaurants.find((r) => r._id.toString() === restaurant_id);
-    // If restaurant not found
+
     if (!restaurant) {
         return <h2 style={{ textAlign: "center", color: "red" }}>Restaurant Not Found</h2>;
     }
@@ -15,7 +15,9 @@ const RestaurantPage = () => {
     return (
         <div style={styles.container}>
             <h1 style={styles.title}>{restaurant.name}</h1>
-            <img src={restaurant.coverImage} alt={restaurant.name} style={styles.image} />
+
+            {/* Pass restaurant to FoodImageCarousel */}
+            <FoodImageCarousel restaurant={restaurant} />
 
             <div style={styles.details}>
                 <p>
@@ -40,7 +42,7 @@ const styles = {
     container: {
         textAlign: "center",
         padding: "20px",
-        maxWidth: "600px",
+        maxWidth: "100%",
         margin: "auto",
         border: "1px solid #ddd",
         borderRadius: "10px",
@@ -50,12 +52,6 @@ const styles = {
         color: "#333",
         fontSize: "28px",
         marginBottom: "10px",
-    },
-    image: {
-        width: "100%",
-        height: "auto",
-        borderRadius: "10px",
-        marginBottom: "15px",
     },
     details: {
         textAlign: "left",
