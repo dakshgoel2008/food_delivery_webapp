@@ -11,6 +11,7 @@ import {
     getReview,
     postAddAddFoodImage,
     postAddFoodItems,
+    postAddRestaurantImages,
     postAddReviews,
     postCuisineCategoryAdd,
     postRestaurant,
@@ -26,12 +27,14 @@ router.post("/register", upload.single("coverImage"), postRestaurant); // upload
 
 router.post("/cusine-category-add", postCuisineCategoryAdd);
 
-router.post("/add-food-items", upload.single("image"), postAddFoodItems);
+router.post("/add-food-items", upload.single("images"), postAddFoodItems);
+
+router.post("/add-restaurant-images", upload.single("images"), postAddRestaurantImages);
 
 //CRUD On FOOD ITEMS:
-router.post("/update-food-items/:id", upload.single("image"), postUpdateFoodItems);
+router.post("/update-food-items/:id", upload.single("images"), postUpdateFoodItems);
 // FOOD ITEM IMAGE:
-router.post("/add-food-images/:id", upload.single("image"), postAddAddFoodImage);
+router.post("/add-food-images/:id", upload.single("images"), postAddAddFoodImage);
 
 router.get("/delete-food-items/:id", getDeleteFoodItems);
 
@@ -45,8 +48,8 @@ router.get("/all", getAllRestaurants);
 router.get("/:id", getRestaurantViaId);
 
 // REVIEWS HANDLER.
-router.post("/add-review", upload.single("image"), postAddReviews);
-router.post("/update-review/:reviewId", upload.single("image"), postUpdateReviews);
+router.post("/add-review", upload.single("images"), postAddReviews);
+router.post("/update-review/:reviewId", upload.single("images"), postUpdateReviews);
 router.get("/delete-review/:reviewId", getDeleteReviews);
 // router.get("/get-all-reviews", getAllReviews);
 router.post("/reviews", getAllReviews);

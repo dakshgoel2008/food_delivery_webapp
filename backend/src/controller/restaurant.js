@@ -619,3 +619,33 @@ export const getReview = ErrorWrapper(async (req, res, next) => {
         throw new ErrorHandler(500, "Unable to get review", err);
     }
 });
+
+export const postAddRestaurantImages = ErrorWrapper(async (req, res, next) => {
+    const { restaurant_name } = req.body;
+    try {
+        const restaurant = await Restaurant.findOne({ name: restaurant_name });
+        if (!restaurant) {
+            throw new ErrorHandler(400, "Restaurant not found");
+        }
+        if (restaurant.email !== req.user.email) {
+            throw new ErrorHandler(401, "Unauthorized to add images", ["email"]);
+        }
+        if (!restaurant.images) {
+            restaurant.images = [];
+        }
+        console.log(restaurant);
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        restaurant.images.push({ url: cloudinaryResponse.secure_url });
+        await restaurant.save();
+        res.status(201).json({
+            message: "Image added successfully",
+            data: restaurant,
+        });
+    } catch (err) {
+        if (err instanceof ErrorHandler) {
+            // Rethrow the specific error
+            throw err;
+        }
+        throw new ErrorHandler(500, "Unable to add image", err);
+    }
+});
