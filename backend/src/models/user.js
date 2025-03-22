@@ -27,6 +27,19 @@ const userSchema = new Schema(
             type: String,
             required: false, // If image is optional
         },
+        cart: [
+            {
+                foodId: { type: Schema.Types.ObjectId, ref: "Restaurant" }, // Reference to the food item
+                name: String,
+                price: Number,
+                quantity: { type: Number, default: 1 },
+                images: [{ url: String }],
+            },
+        ],
+        totalCartPrice: {
+            type: Number,
+            default: 0,
+        },
         orderHistory: [
             {
                 data: {
@@ -60,15 +73,20 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", function (next) {
-    if (!this.isModified("password")) return next(); // if the password of the user is changed then only change the password else do nothing
     const user = this;
-    bcrypt.hash(user.password, 10, (err, hash) => {
-        if (err) {
-            return next(err);
-        }
-        user.password = hash;
-        next();
-    });
+
+    // Hash the password only if it is modified
+    if (user.isModified("password")) {
+        bcrypt.hash(user.password, 10, (err, hash) => {
+            if (err) {
+                return next(err);
+            }
+            user.password = hash;
+            next();
+        });
+    }
+
+    next();
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {

@@ -92,3 +92,5 @@ dist
 src/db/data
 public/images
 .env/
+
+Todo.md

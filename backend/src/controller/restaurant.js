@@ -5,7 +5,7 @@ import uploadOnCloudinary from "../utils/uploadOnCloudinary.js";
 
 export const postRestaurant = ErrorWrapper(async (req, res, next) => {
     const { name, address, contact } = req.body;
-    const email = req.user?.email; // Ensure req.user exists before accessing email
+    const email = req.user?.email; // Ensure req.user exists before accessing email bro
 
     if (!email) {
         throw new ErrorHandler(401, "Please verify your email and try again", ["email"]);
@@ -126,20 +126,17 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
     }
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name.toLowerCase() });
-
         if (restaurant.email !== req.user.email) {
             throw new ErrorHandler(401, "Unauthorized to add categories to this restaurant", ["email"]);
         }
         if (!restaurant) {
             throw new ErrorHandler(400, "Restaurant not found");
         }
-
         // Check whether the cuisine intended to update is present in the restaurant or not.
         const cuisineSelected = restaurant.cuisines.find((c) => c.category === category.toLowerCase());
         if (!cuisineSelected) {
             throw new ErrorHandler(400, `Category '${category}' not found in the restaurant`);
         }
-
         const newFoodItem = {
             name,
             price,
@@ -147,10 +144,17 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
             veg: type.toLowerCase() == "veg",
             images: [],
         };
-        if (req.file.path) {
-            const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
-            newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
-        }
+        // if (!req.file) {
+        //     throw new ErrorHandler(400, "Food item image is required", ["image"]);
+        // }
+
+        // let cloudinaryResponse;
+        // try {
+        //     cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        // } catch (err) {
+        //     throw new ErrorHandler(500, "Failed to upload image", [err.message]);
+        // }
+        // newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
 
         // check if the food item already exists or not.
         const foodExists = cuisineSelected.food.some(
@@ -622,6 +626,7 @@ export const getReview = ErrorWrapper(async (req, res, next) => {
 
 export const postAddRestaurantImages = ErrorWrapper(async (req, res, next) => {
     const { restaurant_name } = req.body;
+    console.log("files: ", req.files);
     try {
         const restaurant = await Restaurant.findOne({ name: restaurant_name });
         if (!restaurant) {
@@ -633,7 +638,6 @@ export const postAddRestaurantImages = ErrorWrapper(async (req, res, next) => {
         if (!restaurant.images) {
             restaurant.images = [];
         }
-        console.log(restaurant);
         const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
         restaurant.images.push({ url: cloudinaryResponse.secure_url });
         await restaurant.save();
