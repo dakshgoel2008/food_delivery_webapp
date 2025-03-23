@@ -73,20 +73,15 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", function (next) {
+    if (!this.isModified("password")) return next(); // if the password of the user is changed then only change the password else do nothing
     const user = this;
-
-    // Hash the password only if it is modified
-    if (user.isModified("password")) {
-        bcrypt.hash(user.password, 10, (err, hash) => {
-            if (err) {
-                return next(err);
-            }
-            user.password = hash;
-            next();
-        });
-    }
-
-    next();
+    bcrypt.hash(user.password, 10, (err, hash) => {
+        if (err) {
+            return next(err);
+        }
+        user.password = hash;
+        next();
+    });
 });
 
 userSchema.methods.comparePassword = async function (enteredPassword) {
