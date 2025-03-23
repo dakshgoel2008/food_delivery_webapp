@@ -10,7 +10,7 @@ const Navbar = () => {
             <div className={Styles["Navlinks_Css"]}>
                 {/* initially isLoggedIn is False */}
                 {/* we are able to use all useReducers because of Provider */}
-                {userData.isLoggedIn && <NavLink to="/cart">Cart</NavLink>}
+                {userData.isLoggedIn && <NavLink to="/cart">DineCart</NavLink>}
                 {userData.isLoggedIn && <NavLink to="/history">History</NavLink>}
                 {userData.isLoggedIn && <NavLink to="/logout">Logout</NavLink>}
                 {userData.isLoggedIn && <ProfileImage imageUrl={userData.image}></ProfileImage>}

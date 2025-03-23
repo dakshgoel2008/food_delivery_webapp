@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "../Utils/axios.js";
 import Styles from "./CSS/auth.module.css";
+import { setUser } from "../Redux/slices/userSlice.js";
 const Login = () => {
     const userRef = useRef();
     const passwordRef = useRef();
@@ -16,7 +17,7 @@ const Login = () => {
                 password: passwordRef.current.value,
                 withCredentials: true,
             });
-            dispatch({ type: "SET_USER", payload: { ...data.user, isLoggedIn: true } });
+            dispatch(setUser({ ...data.user, isLoggedIn: true }));
             navigate("/app");
         } catch (err) {
             alert(err.response?.data.message || "Login failed.");

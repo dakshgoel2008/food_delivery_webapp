@@ -5,7 +5,7 @@ import Home from "./Pages/Home";
 import ErrorPage from "./Pages/Error";
 import Navbar from "./Components/Navbar.js"; // Import the Navbar component
 import RestaurantPage from "./Pages/RestaurantPage.js";
-
+import Cart from "./Pages/Cart.js";
 // React - bootstrap stuffs
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -26,13 +26,14 @@ const App = () => {
                 {/* Authentication pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-
                 {/* Main Home Page */}
                 <Route path="/app" element={<Home />} />
 
                 {/* Particular Restaurant page */}
                 <Route path="/restaurant/:restaurant_id" element={<RestaurantPage />} />
-
+                {/* Cart */}
+                <Route path="/cart" element={<Cart />}></Route>
+                {/* Funny Error Page */}
                 <Route path="*" element={<ErrorPage />} />
             </Routes>
         </div>
