@@ -1,32 +1,117 @@
-import axios from "../Utils/axios.js";
-import React, { useEffect, useState } from "react";
-import Styles from "./CSS/home.module.css";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setCart } from "../Redux/slices/cartSlice.js";
-import MySpinner from "../Components/MySpinner.js";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import axios from "../Utils/axios.js";
+import { setUser } from "../Redux/slices/userSlice";
+import "./CSS/cart.css";
 
 const Cart = () => {
-    const cartData = useSelector((state) => state.cartReducer);
+    const userData = useSelector((state) => state.userReducer);
+    const cartItems = userData.cart || [];
     const dispatch = useDispatch();
-    const [isCartFetched, setIsCartFetched] = useState(false);
-    useEffect(() => {
-        async function getCartDetails() {
-            try {
-                let { data } = await axios.get("/cart/view");
-                dispatch(setCart(data.data));
-                setIsCartFetched(true);
-            } catch (err) {
-                console.error("Error Fetching the Cart", err);
+
+    const removeHandler = async (foodId) => {
+        try {
+            const response = await axios.post("/cart/deleteFromCart", { foodId });
+            if (response.status === 200) {
+                dispatch(
+                    setUser({
+                        ...userData,
+                        cart: response.data.user.cart,
+                        totalCartPrice: response.data.user.totalCartPrice,
+                    })
+                );
             }
+        } catch (error) {
+            console.error("Error removing item:", error.response?.data || error);
         }
-        getCartDetails();
-    }, [dispatch]);
+    };
+
+    const increaseHandler = async (foodId) => {
+        try {
+            const response = await axios.post("/cart/increaseQuantity", { foodId });
+            if (response.status === 200) {
+                dispatch(
+                    setUser({
+                        ...userData,
+                        cart: response.data.user.cart,
+                        totalCartPrice: response.data.user.totalCartPrice,
+                    })
+                );
+            }
+        } catch (err) {
+            console.error("Error increasing quantity:", err.response?.data || err);
+        }
+    };
+
+    const decreaseHandler = async (foodId) => {
+        try {
+            const response = await axios.post("/cart/decreaseQuantity", { foodId });
+            if (response.status === 200) {
+                const updatedCart = response.data.user.cart;
+                const updatedTotalPrice = response.data.user.totalCartPrice;
+                const item = updatedCart.find((cartItem) => cartItem._id === foodId);
+                if (!item || item.quantity === 0) {
+                    await removeHandler(foodId);
+                } else {
+                    dispatch(
+                        setUser({
+                            ...userData,
+                            cart: updatedCart,
+                            totalCartPrice: updatedTotalPrice,
+                        })
+                    );
+                }
+            }
+        } catch (err) {
+            console.error("Error decreasing quantity:", err.response?.data || err);
+        }
+    };
+
     return (
-        <div className={Styles["home-container"]}>
-            <h1 className={Styles["home-heading"]}>Welcome To Shopping cart!</h1>
-            {!isCartFetched && <MySpinner />}
-            
-        </div>
+        <Container className="cart-container">
+            {cartItems.length > 0 && (
+                <div className="checkout-section">
+                    <h4>Total Price: ₹{userData.totalCartPrice}</h4>
+                    <Button className="checkout-btn" size="lg">
+                        Proceed to Checkout
+                    </Button>
+                </div>
+            )}
+            {cartItems.length === 0 ? (
+                <p className="empty-cart">Your cart is empty.</p>
+            ) : (
+                <Row>
+                    {cartItems.map((item, indx) => (
+                        <Col key={indx} md={4} className="mb-4">
+                            <Card className="cart-item-card">
+                                <Card.Img variant="top" src={item.image} alt={item.name} />
+                                <Card.Body>
+                                    <Card.Title>{item.name}</Card.Title>
+                                    <Card.Text>Price: ₹{item.price}</Card.Text>
+                                    <Card.Text>Quantity: {item.quantity}</Card.Text>
+                                    <div className="quantity-section">
+                                        <Button className="quantity-btn" onClick={() => increaseHandler(item._id)}>
+                                            +
+                                        </Button>
+                                        <Button className="quantity-btn" onClick={() => decreaseHandler(item._id)}>
+                                            -
+                                        </Button>
+                                    </div>
+                                    <Button className="remove-btn" onClick={() => removeHandler(item._id)}>
+                                        Remove
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+            )}
+        </Container>
     );
 };
 

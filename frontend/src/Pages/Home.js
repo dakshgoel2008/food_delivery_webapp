@@ -5,6 +5,7 @@ import AllRestaurants from "../Components/Restaurants/AllRestaurants.js";
 import Styles from "./CSS/home.module.css";
 import MySpinner from "../Components/MySpinner.js";
 import { setRestaurants } from "../Redux/slices/restaurantSlice.js";
+import { setUser } from "../Redux/slices/userSlice.js";
 const Home = () => {
     const userData = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
@@ -19,7 +20,18 @@ const Home = () => {
                 console.error("Error fetching restaurants:", error);
             }
         }
+        // fetching the cart details.
+        async function getCartDetails() {
+            try {
+                let { data } = await axios.get("/cart/view");
+                dispatch(setUser(data));
+                // console.log(data);
+            } catch (err) {
+                console.error("Error fetching the Cart", err);
+            }
+        }
         getRestaurantDetails();
+        getCartDetails();
     }, [dispatch]);
 
     return (
