@@ -6,7 +6,6 @@ import uploadOnCloudinary from "../utils/uploadOnCloudinary.js";
 export const postRestaurant = ErrorWrapper(async (req, res, next) => {
     const { name, address, contact } = req.body;
     const email = req.user?.email; // Ensure req.user exists before accessing email bro
-
     if (!email) {
         throw new ErrorHandler(401, "Please verify your email and try again", ["email"]);
     }
@@ -45,8 +44,7 @@ export const postRestaurant = ErrorWrapper(async (req, res, next) => {
             coverImage: cloudinaryResponse.secure_url,
             ownerId: req.user._id,
         });
-
-        await newRestaurant.save();
+        await newRestaurant.save().catch((err) => console.error("Mongoose Save Error:", err));
 
         res.status(200).json({
             success: true,
@@ -102,7 +100,7 @@ export const postCuisineCategoryAdd = ErrorWrapper(async (req, res, next) => {
 
         // directly update the cuisines object in restaurant.
         restaurant.cuisines = [...newCuisines, ...restaurant.cuisines];
-        await restaurant.save();
+        await restaurant.save().catch((err) => console.error("Mongoose Save Error:", err));
         res.status(200).json({
             message: "Categories added successfully!",
             data: restaurant,
@@ -165,7 +163,7 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
         }
         cuisineSelected.food.push(newFoodItem);
 
-        await restaurant.save();
+        await restaurant.save().catch((err) => console.error("Mongoose Save Error:", err));
         res.status(200).json({
             message: "Food item added successfully",
             data: restaurant,
@@ -224,7 +222,7 @@ export const postUpdateFoodItems = ErrorWrapper(async (req, res, next) => {
 
         // update the cuisine with updated item.
         cuisineSelected.food[foodItemIndex] = updatedFoodItem;
-        await restaurant.save();
+        await restaurant.save().catch((err) => console.error("Mongoose Save Error:", err));
         res.status(200).json({
             message: "Food item updated successfully",
             data: restaurant,
@@ -263,7 +261,7 @@ export const postAddAddFoodImage = ErrorWrapper(async (req, res, next) => {
         if (req.file) {
             const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
             cuisineSelected.food[foodItemIndex].images.push({ url: cloudinaryResponse.secure_url });
-            await restaurant.save();
+            await restaurant.save().catch((err) => console.error("Mongoose Save Error:", err));
         } else {
             throw new ErrorHandler(400, "No image provided");
         }
