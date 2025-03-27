@@ -10,6 +10,90 @@ User Authentication: Secure authentication using JWT tokens.
 
 Role-Based Access Control: Separate functionalities for users, restaurants.
 
-Menu Management: Restaurants can add, edit, or remove menu and cuisine items (Backend implemented for this😊)
+Menu Management: Restaurants can add, edit, or remove menu and cuisine items
 
 Still Under progress 😊
+
+#### 📌 Prerequisites
+
+Ensure you have the following installed:
+
+-   Node.js (LTS version recommended)
+
+-   MongoDB (Locally or using MongoDB Atlas)
+
+-   Git
+
+#### 🛠️ Setup Guide
+
+1️⃣ Fork & Clone the Repository
+Fork this repository to your GitHub account.
+
+Clone it to your local machine:
+
+bash
+Copy
+Edit
+git clone https://github.com/your-username/food-delivery-app.git
+Navigate into the project directory:
+
+bash
+Copy
+Edit
+cd food-delivery-app
+2️⃣ Start MongoDB
+Make sure MongoDB is running. If using a local instance, start MongoDB with:
+
+bash
+Copy
+Edit
+mongod --dbpath=data
+3️⃣ Backend Setup (Express + MongoDB)
+Navigate to the backend folder:
+
+bash
+Copy
+Edit
+cd backend
+Install dependencies:
+
+bash
+Copy
+Edit
+npm init -y
+
+bash
+Copy
+Edit
+npm i express
+Start the backend server:
+
+bash
+Copy
+Edit
+npm start
+4️⃣ Frontend Setup (React.js)
+Open a new terminal and navigate to the frontend directory:
+
+bash
+Copy
+Edit
+cd frontend/src
+Install dependencies:
+
+bash
+Copy
+Edit
+npm init -y
+Start the frontend server:
+
+bash
+Copy
+Edit
+npm start
+5️⃣ Open the App
+Once both servers are running:
+
+Open http://localhost:3000/ to access the frontend. {Will start once react started to work}
+
+The backend API will be available at http://localhost:4444/ {By Default} -> (or the port defined in your backend .env).
