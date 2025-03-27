@@ -1,63 +1,66 @@
+/* 🏆 Centered Floating Navbar */
 .Navlinks_Css {
-    position: fixed; /* Sticks to the top */
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: fixed;
+    top: 12px; /* Adjusted to float in the center-top */
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
     display: flex;
-    gap: 100px; /* Adjusted spacing */
+    gap: 30px; /* Balanced spacing */
     list-style: none;
-    padding: 1px 0; /* Adds height */
+    padding: 8px 18px;
     margin: 0;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.9); /* Slight transparency for better design */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adds shadow for better visibility */
-    z-index: 1000; /* Ensures it's above other content */
-    backdrop-filter: blur(10px); /* Optional: Smooth glass effect */
+    background: rgba(20, 20, 20, 0.8); /* Dark translucent background */
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.5); /* Neon glow effect */
+    backdrop-filter: blur(15px); /* Smooth glass effect */
+    z-index: 1000;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Link styling */
+/* 🌀 Navbar Links */
 .Navlinks_Css a {
     text-decoration: none;
-    color: #333;
-    font-size: 17px;
+    color: #ffb347; /* Warm neon orange */
+    font-size: 16px;
     font-weight: 600;
-    padding: 12px 18px;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
+    padding: 10px 16px;
+    border-radius: 25px;
     position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
-/* Hover effect */
+/* ✨ Neon Hover Effect */
 .Navlinks_Css a:hover {
-    background-color: #ecee4f;
-    color: rgba(29, 28, 28, 0.983);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    transform: translateY(-2px);
+    background: linear-gradient(90deg, #ff7300, #ffae00);
+    color: black;
+    box-shadow: 0px 0px 12px rgba(255, 140, 0, 0.8);
+    transform: scale(1.1);
 }
 
-/* Active link */
+/* 🔥 Active Link */
 .Navlinks_Css a.active {
-    background-color: #e6b845;
+    background: linear-gradient(45deg, #ff8c00, #ff4500);
     color: white;
     font-weight: bold;
+    box-shadow: 0px 0px 20px rgba(255, 140, 0, 1);
 }
 
-/* Push content below the navbar */
+/* 🚀 Push content down */
 body {
-    padding-top: 60px; /* Prevents overlap with navbar */
+    padding-top: 80px; /* Adjust for floating navbar */
 }
 
-/* Responsive design */
+/* 📱 Responsive Design */
 @media screen and (max-width: 768px) {
     .Navlinks_Css {
-        flex-direction: column;
-        gap: 10px;
-        padding: 12px 0;
+        flex-direction: row;
+        gap: 15px;
+        padding: 6px 12px;
+        top: 15px;
     }
     .Navlinks_Css a {
-        padding: 10px 15px;
-        font-size: 16px;
+        font-size: 14px;
+        padding: 8px 12px;
     }
 }

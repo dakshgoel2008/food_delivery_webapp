@@ -2,7 +2,7 @@ import Styles from "./CSS/auth.module.css";
 import React, { useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "../Utils/axios.js";
-
+import signUp from "../Assets/signUp.png"
 const Signup = () => {
     const usernameRef = useRef();
     const emailRef = useRef();
@@ -38,6 +38,7 @@ const Signup = () => {
 
     return (
         <div className={Styles["auth-page"]}>
+            <img src={signUp} alt="Login" className={Styles["auth-image"]} />
             <div className={Styles["auth-container"]}>
                 <h2>Signup</h2>
                 <input ref={usernameRef} type="text" placeholder="Enter username" />

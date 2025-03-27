@@ -1,24 +1,26 @@
-/* Auth Page Container */
+/* Fullscreen background */
 .auth-page {
     font-family: "Poppins", sans-serif;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100vh;
     margin: 0;
+    gap: 2rem; /* Space between image and form */
+    flex-wrap: wrap; /* Ensures responsiveness on smaller screens */
+    background-color: #000;
 }
 
-/* Centered form container */
 .auth-container {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
     width: 350px;
     text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Form heading */
@@ -26,23 +28,32 @@
     margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* Input fields */
 .auth-container input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin: 10px 0;
     border: none;
+    background: rgba(255, 255, 255, 0.2); /* Transparent input */
+    color: #fff;
     border-radius: 5px;
     font-size: 16px;
+    outline: none;
 }
 
-/* Button styles */
+/* Placeholder text */
+.auth-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Login button */
 .auth-container button {
     width: 100%;
     padding: 12px;
-    background: #ff6b6b;
+    background: rgba(255, 71, 87, 0.8);
     border: none;
     color: white;
     font-size: 18px;
@@ -53,14 +64,7 @@
 }
 
 .auth-container button:hover {
-    background: #ff4757;
-}
-
-/* File input */
-.auth-container input[type="file"] {
-    background: #fff;
-    padding: 8px;
-    cursor: pointer;
+    background: rgba(255, 71, 87, 1);
 }
 
 /* NavLink styles */
@@ -70,11 +74,29 @@
 }
 
 .auth-container .nav-link {
-    color: #e4ba13fb;
+    color: #ffc107;
     text-decoration: none;
     font-weight: bold;
 }
 
 .auth-container .nav-link:hover {
     text-decoration: underline;
+}
+
+.auth-image {
+    width: 40%;
+    max-width: 400px;
+    height: auto;
+    object-fit: contain;
+}
+@media (max-width: 768px) {
+    .auth-page {
+        flex-direction: column; /* Stack items on smaller screens */
+        text-align: center;
+    }
+
+    .auth-image {
+        width: 60%; /* Increase image size on smaller screens */
+        max-width: 250px;
+    }
 }

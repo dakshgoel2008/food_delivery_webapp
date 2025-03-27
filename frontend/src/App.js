@@ -9,6 +9,7 @@ import Cart from "./Pages/Cart.js";
 // React - bootstrap stuffs
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import FrontPage from "./Pages/FrontPage.js";
 
 <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -35,6 +36,7 @@ const App = () => {
                 <Route path="/cart" element={<Cart />}></Route>
                 {/* Funny Error Page */}
                 <Route path="*" element={<ErrorPage />} />
+                <Route path="/" element={<FrontPage />}></Route>
             </Routes>
         </div>
     );

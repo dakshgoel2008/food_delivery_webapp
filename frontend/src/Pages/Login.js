@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import axios from "../Utils/axios.js";
 import Styles from "./CSS/auth.module.css";
 import { setUser } from "../Redux/slices/userSlice.js";
+import loginImage from "../Assets/login.png";
 const Login = () => {
     const userRef = useRef();
     const passwordRef = useRef();
@@ -26,6 +27,7 @@ const Login = () => {
 
     return (
         <div className={Styles["auth-page"]}>
+            <img src={loginImage} alt="Login" className={Styles["auth-image"]} />
             <div className={Styles["auth-container"]}>
                 <h2>Login</h2>
                 <input ref={userRef} type="text" placeholder="Enter Username" />

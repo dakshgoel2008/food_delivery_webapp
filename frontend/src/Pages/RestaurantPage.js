@@ -1,74 +1,58 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useParams } from "react-router-dom";
 import FoodImageCarousel from "../Components/Restaurants/FoodImageCrousel";
-
+import "./CSS/RestaurantPage.css"; // Importing CSS file
+import { Button } from "react-bootstrap";
+import axios from "../Utils/axios.js";
+import { setUser } from "../Redux/slices/userSlice";
 const RestaurantPage = () => {
     const { restaurant_id } = useParams();
     const restaurants = useSelector((state) => state.restaurantReducer);
     const restaurant = restaurants.find((r) => r._id.toString() === restaurant_id);
-
     if (!restaurant) {
-        return <h2 style={{ textAlign: "center", color: "red" }}>Restaurant Not Found</h2>;
+        return <h2 className="not-found">Restaurant Not Found</h2>;
     }
-
+    const cartAddHandler = async (foodId) => {
+        try {
+            console.log(foodId);
+            const response = await axios.post("/cart/addToCart", { foodId, restaurant_name: restaurant.name });
+            console.log(response);
+        } catch (err) {
+            console.error("Error adding to cart:", err.response?.data || err);
+        }
+    };
     return (
-        <div style={styles.container}>
-            <h1 style={styles.title}>{restaurant.name}</h1>
+        <div className="restaurant-container">
+            <h1 className="restaurant-title">{restaurant.name}</h1>
 
-            {/* Pass restaurant to FoodImageCarousel */}
             <FoodImageCarousel restaurant={restaurant} />
 
-            <div style={styles.details}>
-                <p>
-                    <strong>🍽️ Cuisine:</strong> {restaurant.cuisine}
-                </p>
-                <p>
-                    <strong>⭐ Rating:</strong> {restaurant.rating} / 5
-                </p>
-                <p>
-                    <strong>💰 Price Range:</strong> {restaurant.priceRange}
+            <div className="restaurant-details">
+                <h2>🍽️ Menu</h2>
+                {restaurant.cuisines.map((data, indx) => (
+                    <div key={indx} className="menu-category">
+                        <h3>{data.category}</h3>
+                        <ul className="food-list">
+                            {data.food.map((item, indx2) => (
+                                <li key={indx2} className="food-item">
+                                    <strong>{item.name}</strong> - ₹{item.price} ({item.description})
+                                    <Button onClick={() => cartAddHandler(item._id)}>Add to cart</Button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+                <p className="restaurant-reviews">
+                    <strong>Reviews:</strong> {restaurant.reviews}
                 </p>
             </div>
 
-            <button style={styles.backButton} onClick={() => window.history.back()}>
-                🔙 Back to Restaurants
-            </button>
+            <NavLink to = "/app">
+                <button className="back-button">🔙 Back to Restaurants</button>
+            </NavLink>
         </div>
     );
-};
-
-const styles = {
-    container: {
-        textAlign: "center",
-        padding: "20px",
-        maxWidth: "100%",
-        margin: "auto",
-        border: "1px solid #ddd",
-        borderRadius: "10px",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-    },
-    title: {
-        color: "#333",
-        fontSize: "28px",
-        marginBottom: "10px",
-    },
-    details: {
-        textAlign: "left",
-        padding: "0 20px",
-        fontSize: "18px",
-        lineHeight: "1.5",
-    },
-    backButton: {
-        marginTop: "15px",
-        padding: "10px 15px",
-        backgroundColor: "#ff4d4d",
-        color: "#fff",
-        border: "none",
-        borderRadius: "5px",
-        cursor: "pointer",
-        fontSize: "16px",
-    },
 };
 
 export default RestaurantPage;

@@ -1,53 +1,35 @@
-/* Reset styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body styling */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", 
-                 "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    background-color: #f8faf8; /* Light gray background for better contrast */
-    color: #333; /* Improved readability */
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212 !important; /* Deep Black Background */
+    color: #ffffff; /* White Text */
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling */
 html {
     scroll-behavior: smooth;
 }
 
-/* Styling for code blocks */
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 4px 6px;
-    border-radius: 4px;
-}
-
-/* Profile image */
 .profile-image {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    object-fit: cover; /* Ensures image fills the space properly */
-    border: 2px solid #ddd; /* Subtle border */
+    object-fit: cover;
+    border: 2px solid #ff8c00;
     transition: transform 0.3s ease-in-out;
 }
 
-/* Hover effect for profile image */
 .profile-image:hover {
     transform: scale(1.1);
     cursor: pointer;
 }
-
-/* Responsive typography */
-@media screen and (max-width: 768px) {
-    body {
-        font-size: 14px; /* Slightly smaller font for mobile */
-    }
+[data-new-gr-c-s-check-loaded] {
+    all: unset !important;
 }
