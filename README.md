@@ -31,66 +31,63 @@ Fork this repository to your GitHub account.
 
 Clone it to your local machine:
 
-bash
-Copy
-Edit
+```bash
 git clone https://github.com/your-username/food-delivery-app.git
 Navigate into the project directory:
+```
 
-bash
-Copy
-Edit
+```bash
 cd food-delivery-app
+```
+
 2️⃣ Start MongoDB
 Make sure MongoDB is running. If using a local instance, start MongoDB with:
 
-bash
-Copy
-Edit
+```bash
 mongod --dbpath=data
+```
+
 3️⃣ Backend Setup (Express + MongoDB)
 Navigate to the backend folder:
 
-bash
-Copy
-Edit
+```bash
 cd backend
+```
+
 Install dependencies:
 
-bash
-Copy
-Edit
-npm init -y
+````bash
+npm init -y```
 
-bash
-Copy
-Edit
+```bash
 npm i express
+````
+
 Start the backend server:
 
-bash
-Copy
-Edit
+```bash
 npm start
+```
+
 4️⃣ Frontend Setup (React.js)
 Open a new terminal and navigate to the frontend directory:
 
-bash
-Copy
-Edit
+```bash
 cd frontend/src
+```
+
 Install dependencies:
 
-bash
-Copy
-Edit
+```bash
 npm init -y
+```
+
 Start the frontend server:
 
-bash
-Copy
-Edit
+```bash
 npm start
+```
+
 5️⃣ Open the App
 Once both servers are running:
 
