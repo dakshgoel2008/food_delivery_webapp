@@ -56,12 +56,13 @@ cd backend
 
 Install dependencies:
 
-````bash
-npm init -y```
+```bash
+npm init -y
+```
 
 ```bash
 npm i express
-````
+```
 
 Start the backend server:
 
