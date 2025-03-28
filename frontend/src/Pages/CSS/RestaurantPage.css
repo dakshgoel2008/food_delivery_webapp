@@ -10,75 +10,80 @@
 /* Container Styles */
 .restaurant-container {
     text-align: center;
-    padding: 100px;
-    max-width: 850px;
+    padding: 80px;
+    max-width: 900px;
     margin: auto;
     border-radius: 15px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(12px);
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.3);
-    animation: fadeIn 0.7s ease-in-out;
-    border: 2px solid rgba(255, 255, 255, 0.25);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    animation: fadeIn 0.7s ease-in-out;
 }
 
 .restaurant-title {
+    margin-top: 20px;
+    margin-bottom: 20px;
     color: #222;
-    font-size: 38px;
-    margin-bottom: 15px;
+    font-size: 40px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.8px;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.25);
-    transition: all 0.3s ease-in-out;
+    letter-spacing: 2px;
+    text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease-in-out;
 }
 
 .restaurant-title:hover {
-    color: #ff4d4d;
-    text-shadow: 4px 4px 10px rgba(255, 77, 77, 0.5);
+    color: #e63946;
+    text-shadow: 5px 5px 12px rgba(230, 57, 70, 0.6);
 }
 
-/* Not Found Message */
+/* Restaurant Not Found Message */
 .not-found {
     text-align: center;
-    color: #ff4d4d;
-    font-size: 24px;
+    color: #e63946;
+    font-size: 26px;
     font-weight: bold;
     margin-top: 50px;
-    animation: shake 0.6s ease-in-out infinite alternate;
-    text-shadow: 3px 3px 6px rgba(255, 0, 0, 0.4);
+    animation: shake 0.5s ease-in-out infinite alternate;
 }
 
 /* Menu Section */
 .restaurant-details {
+    margin-top: 20px;
     text-align: left;
-    padding: 18px 28px;
-    font-size: 20px;
-    line-height: 1.9;
+    padding: 20px 30px;
+    font-size: 18px;
+    line-height: 1.8;
     color: #333;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 /* Menu Category */
 .menu-category {
-    background: linear-gradient(135deg, #ff5757, #ff8e8e);
+    background: linear-gradient(135deg, #e63946, #ff7b7b);
     padding: 14px;
     border-radius: 12px;
     margin-bottom: 18px;
-    border-left: 8px solid #ff0000;
+    border-left: 6px solid #b71c1c;
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     color: white;
     font-weight: bold;
-    letter-spacing: 1.2px;
     text-align: center;
     text-transform: uppercase;
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
+}
+
+.Menu {
+    font-weight: bold;
+    font-size: 50px;
 }
 
 .menu-category:hover {
-    transform: scale(1.06);
+    transform: scale(1.05);
     box-shadow: 5px 5px 18px rgba(255, 0, 0, 0.3);
 }
 
@@ -91,74 +96,65 @@
 
 /* Food Items */
 .food-item {
-    background: linear-gradient(135deg, #222, #444); /* Darker background */
-    color: #fff; /* White text for contrast */
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
     padding: 12px 18px;
     margin: 6px 0;
     border-radius: 8px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-weight: bold;
     cursor: pointer;
+}
+.items {
+    display: flex;
+    justify-content: space-between;
 }
 
 .food-item:hover {
-    transform: scale(1.03);
-    background: linear-gradient(135deg, #333, #555);
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #3b4a5a, #5d6d7e);
     box-shadow: 0px 5px 10px rgba(255, 0, 0, 0.3);
-}
-
-/* Food Item Icon */
-.food-item::before {
-    content: "🍽️";
-    font-size: 22px;
-    margin-right: 12px;
-    transition: transform 0.3s ease-in-out;
-}
-
-.food-item:hover::before {
-    transform: rotate(10deg);
 }
 
 /* Reviews */
 .restaurant-reviews {
     margin-top: 24px;
-    font-size: 20px;
+    font-size: 18px;
     color: #444;
     font-style: italic;
     text-align: center;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.05);
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.07);
     border-radius: 10px;
 }
 
 /* Back Button */
 .back-button {
     margin-top: 30px;
-    padding: 16px 24px;
-    background: linear-gradient(135deg, #ff4d4d, #d90000);
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #e63946, #b71c1c);
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.25);
 }
 
 .back-button:hover {
-    background: linear-gradient(135deg, #d90000, #a30000);
+    background: linear-gradient(135deg, #b71c1c, #8b0000);
     box-shadow: 0px 7px 14px rgba(255, 0, 0, 0.5);
-    transform: scale(1.06);
+    transform: scale(1.07);
 }
 
-/* Fade-in Animation */
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -170,12 +166,58 @@
     }
 }
 
-/* Shake Animation for Not Found Message */
 @keyframes shake {
     from {
-        transform: translateX(-6px);
+        transform: translateX(-5px);
     }
     to {
-        transform: translateX(6px);
+        transform: translateX(5px);
     }
+}
+
+/*TODO Still Under Progress */
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.modal-content {
+    position: absolute; /* Changed from fixed */
+    color: white !important;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    background: rgba(0, 0, 0, 0.8);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Close Button */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    background: #d90000;
 }

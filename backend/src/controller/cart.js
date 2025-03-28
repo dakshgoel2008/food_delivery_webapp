@@ -45,6 +45,7 @@ export const postAddToCart = ErrorWrapper(async (req, res, next) => {
                 _id: foodItem._id,
                 name: foodItem.name,
                 price: foodItem.price,
+                images: [...foodItem.images],
                 quantity: 1,
             });
         }

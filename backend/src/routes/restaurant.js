@@ -27,9 +27,9 @@ router.post("/register", upload.single("coverImage"), postRestaurant); // upload
 
 router.post("/cusine-category-add", postCuisineCategoryAdd);
 
-router.post("/add-food-items", upload.array("images", 5), postAddFoodItems);
+router.post("/add-food-items", upload.single("images"), postAddFoodItems);
 
-router.post("/add-restaurant-images", upload.array("images", 5), postAddRestaurantImages);
+router.post("/add-restaurant-images", upload.single("images"), postAddRestaurantImages);
 
 //CRUD On FOOD ITEMS:
 router.post("/update-food-items/:id", upload.single("images"), postUpdateFoodItems);

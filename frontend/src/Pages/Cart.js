@@ -10,18 +10,20 @@ import axios from "../Utils/axios.js";
 import { setUser } from "../Redux/slices/userSlice";
 import "./CSS/cart.css";
 import Footer from "../Components/Footer.js";
+import defaultImage from "../Assets/default-image.jpg";
 const Cart = () => {
     const [loading, setLoading] = useState(true);
     const userData = useSelector((state) => state.userReducer);
     const cartItems = userData.cart || [];
     const dispatch = useDispatch();
-
     useEffect(() => {
         if (cartItems.length > 0 || userData.totalCartPrice !== undefined) {
             setLoading(false);
         }
     }, [cartItems, userData.totalCartPrice]);
-
+    // for (let i of cartItems) {
+    //     console.log(i.images);
+    // }
     const removeHandler = async (foodId) => {
         try {
             const response = await axios.post("/cart/deleteFromCart", { foodId });
@@ -104,7 +106,11 @@ const Cart = () => {
                             {cartItems.map((item, indx) => (
                                 <Col key={indx} md={4} className="mb-4">
                                     <Card className="cart-item-card">
-                                        <Card.Img variant="top" src={item.image} alt={item.name} />
+                                        <Card.Img
+                                            variant="top"
+                                            src={item.images.length > 0 ? item.images[0].url : defaultImage}
+                                            alt={item.name}
+                                        />
                                         <Card.Body>
                                             <Card.Title>{item.name}</Card.Title>
                                             <Card.Text>Price: ₹{item.price}</Card.Text>

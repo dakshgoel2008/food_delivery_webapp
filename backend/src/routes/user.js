@@ -9,4 +9,6 @@ router.post("/signup", upload.single("image"), postSignup); // upload.single wil
 
 router.post("/login", postLogin);
 
+// router.post("/logout", postLogout);
+
 export default router;

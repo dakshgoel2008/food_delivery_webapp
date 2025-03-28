@@ -1,7 +1,7 @@
 import React from "react";
 
 const OrderHistory = () => {
-    return <div>OrderHistory</div>;
+    return <div>Hellomwold</div>;
 };
 
 export default OrderHistory;

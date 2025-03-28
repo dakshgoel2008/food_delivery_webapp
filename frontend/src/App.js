@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import Home from "./Pages/Home";
@@ -21,16 +21,14 @@ import ContactPage from "./Pages/ContactPage.js";
 const App = () => {
     return (
         <div>
-            {/* Conditionally render the Navbar */}
             {<Navbar />}
 
             <Routes>
-                {/* Authentication pages */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 {/* Main Home Page */}
                 <Route path="/app" element={<Home />} />
-
+                <Route path="/orderHistory" element={<orderHistory />}></Route>
                 {/* Particular Restaurant page */}
                 <Route path="/restaurant/:restaurant_id" element={<RestaurantPage />} />
                 {/* Cart */}

@@ -142,17 +142,17 @@ export const postAddFoodItems = ErrorWrapper(async (req, res, next) => {
             veg: type.toLowerCase() == "veg",
             images: [],
         };
-        // if (!req.file) {
-        //     throw new ErrorHandler(400, "Food item image is required", ["image"]);
-        // }
+        if (!req.file) {
+            throw new ErrorHandler(400, "Food item image is required", ["image"]);
+        }
 
-        // let cloudinaryResponse;
-        // try {
-        //     cloudinaryResponse = await uploadOnCloudinary(req.file.path);
-        // } catch (err) {
-        //     throw new ErrorHandler(500, "Failed to upload image", [err.message]);
-        // }
-        // newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
+        let cloudinaryResponse;
+        try {
+            cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        } catch (err) {
+            throw new ErrorHandler(500, "Failed to upload image", [err.message]);
+        }
+        newFoodItem.images.push({ url: cloudinaryResponse.secure_url });
 
         // check if the food item already exists or not.
         const foodExists = cuisineSelected.food.some(
