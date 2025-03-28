@@ -10,6 +10,7 @@ import Cart from "./Pages/Cart.js";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FrontPage from "./Pages/FrontPage.js";
+import ContactPage from "./Pages/ContactPage.js";
 
 <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -37,6 +38,7 @@ const App = () => {
                 {/* Funny Error Page */}
                 <Route path="*" element={<ErrorPage />} />
                 <Route path="/" element={<FrontPage />}></Route>
+                <Route path="/contactUs" element={<ContactPage />}></Route>
             </Routes>
         </div>
     );

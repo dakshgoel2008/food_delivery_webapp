@@ -9,7 +9,7 @@ import Spinner from "react-bootstrap/Spinner"; // Import Spinner
 import axios from "../Utils/axios.js";
 import { setUser } from "../Redux/slices/userSlice";
 import "./CSS/cart.css";
-
+import Footer from "../Components/Footer.js";
 const Cart = () => {
     const [loading, setLoading] = useState(true);
     const userData = useSelector((state) => state.userReducer);
@@ -81,54 +81,63 @@ const Cart = () => {
     };
 
     return (
-        <Container className="cart-container">
-            {loading ? (
-                <div className="spinner-container">
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </div>
-            ) : cartItems.length > 0 ? (
-                <>
-                    <div className="checkout-section">
-                        <h4>Total Price: ₹{userData.totalCartPrice}</h4>
-                        <Button className="checkout-btn" size="lg">
-                            Proceed to Checkout
-                        </Button>
-                        <button className="back-btn" onClick={() => window.history.back()}>
-                            🔙 Back to Restaurants
-                        </button>
+        <>
+            <Container className="cart-container">
+                {loading ? (
+                    <div className="spinner-container">
+                        <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
                     </div>
-                    <Row>
-                        {cartItems.map((item, indx) => (
-                            <Col key={indx} md={4} className="mb-4">
-                                <Card className="cart-item-card">
-                                    <Card.Img variant="top" src={item.image} alt={item.name} />
-                                    <Card.Body>
-                                        <Card.Title>{item.name}</Card.Title>
-                                        <Card.Text>Price: ₹{item.price}</Card.Text>
-                                        <Card.Text>Quantity: {item.quantity}</Card.Text>
-                                        <div className="quantity-section">
-                                            <Button className="quantity-btn" onClick={() => increaseHandler(item._id)}>
-                                                +
+                ) : cartItems.length > 0 ? (
+                    <>
+                        <div className="checkout-section">
+                            <h4>Total Price: ₹{userData.totalCartPrice}</h4>
+                            <Button className="checkout-btn" size="lg">
+                                Proceed to Checkout
+                            </Button>
+                            <button className="back-btn" onClick={() => window.history.back()}>
+                                🔙 Back to Restaurants
+                            </button>
+                        </div>
+                        <Row>
+                            {cartItems.map((item, indx) => (
+                                <Col key={indx} md={4} className="mb-4">
+                                    <Card className="cart-item-card">
+                                        <Card.Img variant="top" src={item.image} alt={item.name} />
+                                        <Card.Body>
+                                            <Card.Title>{item.name}</Card.Title>
+                                            <Card.Text>Price: ₹{item.price}</Card.Text>
+                                            <Card.Text>Quantity: {item.quantity}</Card.Text>
+                                            <div className="quantity-section">
+                                                <Button
+                                                    className="quantity-btn"
+                                                    onClick={() => increaseHandler(item._id)}
+                                                >
+                                                    +
+                                                </Button>
+                                                <Button
+                                                    className="quantity-btn"
+                                                    onClick={() => decreaseHandler(item._id)}
+                                                >
+                                                    -
+                                                </Button>
+                                            </div>
+                                            <Button className="remove-btn" onClick={() => removeHandler(item._id)}>
+                                                Remove
                                             </Button>
-                                            <Button className="quantity-btn" onClick={() => decreaseHandler(item._id)}>
-                                                -
-                                            </Button>
-                                        </div>
-                                        <Button className="remove-btn" onClick={() => removeHandler(item._id)}>
-                                            Remove
-                                        </Button>
-                                    </Card.Body>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                </>
-            ) : (
-                <p className="empty-cart">Your cart is empty.</p>
-            )}
-        </Container>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            ))}
+                        </Row>
+                    </>
+                ) : (
+                    <p className="empty-cart">Your cart is empty.</p>
+                )}
+            </Container>
+            <Footer></Footer>
+        </>
     );
 };
 

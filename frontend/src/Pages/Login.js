@@ -31,7 +31,7 @@ const Login = () => {
             <div className={Styles["auth-container"]}>
                 <h2>Login</h2>
                 <input ref={userRef} type="text" placeholder="Enter Username" />
-                <input ref={passwordRef} type="password" placeholder="Enter password" />
+                <input ref={passwordRef} type="password" placeholder="Enter Password" />
                 <button onClick={loginHandler}>Login</button>
                 <p>
                     Don't have an account?{" "}

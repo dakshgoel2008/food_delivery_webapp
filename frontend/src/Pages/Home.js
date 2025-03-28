@@ -6,6 +6,7 @@ import Styles from "./CSS/home.module.css";
 import MySpinner from "../Components/MySpinner.js";
 import { setRestaurants } from "../Redux/slices/restaurantSlice.js";
 import { setUser } from "../Redux/slices/userSlice.js";
+import Footer from "../Components/Footer.js";
 const Home = () => {
     const userData = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
@@ -35,11 +36,14 @@ const Home = () => {
     }, [dispatch]);
 
     return (
-        <div className={Styles["home-container"]}>
-            <h1 className={Styles["home-heading"]}>Welcome, {userData.username}!</h1>
-            {!isRestaurantFetched && <MySpinner />}
-            {isRestaurantFetched && <AllRestaurants />}
-        </div>
+        <>
+            <div className={Styles["home-container"]}>
+                <h1 className={Styles["home-heading"]}>Welcome, {userData.username}!</h1>
+                {!isRestaurantFetched && <MySpinner />}
+                {isRestaurantFetched && <AllRestaurants />}
+            </div>
+            <Footer></Footer>
+        </>
     );
 };
 

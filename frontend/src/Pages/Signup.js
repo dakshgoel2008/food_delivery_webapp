@@ -2,7 +2,7 @@ import Styles from "./CSS/auth.module.css";
 import React, { useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "../Utils/axios.js";
-import signUp from "../Assets/signUp.png"
+import signUp from "../Assets/signUp.png";
 const Signup = () => {
     const usernameRef = useRef();
     const emailRef = useRef();
@@ -41,11 +41,23 @@ const Signup = () => {
             <img src={signUp} alt="Login" className={Styles["auth-image"]} />
             <div className={Styles["auth-container"]}>
                 <h2>Signup</h2>
-                <input ref={usernameRef} type="text" placeholder="Enter username" />
-                <input ref={emailRef} type="email" placeholder="Enter email" />
-                <input ref={passwordRef} type="password" placeholder="Enter password" />
-                <input ref={nameRef} type="text" placeholder="Enter name" />
-                <input type="file" accept="image/*" onChange={handleImageChange} />
+                <input ref={usernameRef} type="text" placeholder="Enter Username" />
+                <input ref={emailRef} type="email" placeholder="Enter Email" />
+                <input ref={passwordRef} type="password" placeholder="Enter Password" />
+                <input ref={nameRef} type="text" placeholder="Enter Name" />
+                <legend className={Styles["file-upload-container"]}>
+                    <label htmlFor="profile-image" className={Styles["file-upload-label"]}>
+                        Choose Profile Image
+                    </label>
+                    <input
+                        id="profile-image"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className={Styles["file-upload-input"]}
+                    />
+                </legend>
+
                 <button onClick={signupHandler}>Signup</button>
                 <p>
                     Already have an account?{" "}
